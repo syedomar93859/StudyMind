@@ -9,5 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^2.2.0",
+    "dotenv": "^17.4.2"
+  }
 }

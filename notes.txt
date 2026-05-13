@@ -8,3 +8,12 @@ lsof -i :3000
 
 use this command to stop the server but replace 68191 with the PID:
 kill -9 68191
+
+command for gemini sdk:
+npm install @google/genai
+
+handling API keys safely:
+npm install dotenv
+
+you have to create an a gemini api key:
+https://ai.google.dev/gemini-api/docs/quickstart
