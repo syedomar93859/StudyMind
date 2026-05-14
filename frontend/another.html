@@ -1,0 +1,59 @@
+<!-- this is a declaration used to specify that this file/document is written in html5 -->
+<!DOCTYPE html>
+
+<!-- the <html> element is the root element of this document which means everything inside this considered as part of the html document -->
+<!-- the lang attribute tells the language of this document is "en" for English -->
+<html lang="en">
+
+<!-- the <head> section contains metadata about the document that isn't displayed on the frontend -->
+<head>
+
+    <!-- Specifies the character encoding for the document. UTF-8 supports many characters from all kinds of languages-->
+    <meta charset="UTF-8">
+
+    <!-- The viewport is the area of a web page that the user can see -->
+    <!-- The viewport varies with the device such as being smaller on a phone than a laptop -->
+    <!-- The <meta> allows us to give instructions to the browser on how to control the page's dimensions and scaling-->
+    <!-- width=device-width part sets the width of the page to be the same as the screen-width of the device -->
+    <!-- The initial-scale=1.0 part sets the initial zoom level when the page is first loaded by the browser-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles.css">
+    <title>Code Quiz Creator</title>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+</head>
+<body>
+  <div class="page">
+    <h1>Quiz Creator For Programming Practice</h1>
+    <p>This is a tool to help you create quizzes for programming practice.</p>
+
+    <div class="language-selection">
+      <button onclick="toggleLanguage(this)" data-language="Computing Machinery">Computing Machinery</button>
+      <button onclick="toggleLanguage(this)" data-language="Java">Java</button>
+      <button onclick="toggleLanguage(this)" data-language="C">C</button>
+    </div>
+
+    <div class="section">
+      <div class="controls">
+        <div class="tries-selection">
+          <label class="label" for="triesPerQuestion">How many tries per question?</label>
+          <input type="number" id="triesPerQuestion" min="1" max="10" step="1" value="3">
+          <label class="label" for="numberOfQuestions">How many questions?</label>
+          <input type="number" id="numberOfQuestions" min="1" max="150" step="1" value="10">
+        </div>
+
+        <div class="quiz-creation">
+          <button onclick="quizCreator()">Create Quiz</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- This class dfines a section in the web page where the quiz questions are meant to be displayed-->
+    <div class="quiz"></div>
+
+    <script type="module" src="quiz-creation.js"></script>
+  </div>
+</body>
+
+</html>

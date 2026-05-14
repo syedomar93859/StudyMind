@@ -5,19 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyMind</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src= "main.js" defer ></script>
 </head>
 <body>
     <h1>StudyMind: An AI Study Assistant</h1>
     <p>This is a tool to ask an AI to learn, review and practice for any topic you want to know more about.</p>
     <p>What do you want to ask?</p>
-    <input type="text" id="submission">
+    <!-- <input type="text" id="submission" placeholder="Some text..." > -->
+    <textarea name="text" id="submission" placeholder="Some text..." ></textarea>
     <br><br>
     <!-- <button style="font-size:25px; background-color: gray; color: lightblue; border-radius:15px;">Submit</button> -->
-    <button onclick="toggleSubmit(this)" data-language="Submission">Submit</button>
+    <!-- <button onclick="toggleSubmit(this)" data-language="Submission">Submit</button> -->
+     <button id ="submit">Submit</button>
 
     <div class="response"></div>
-
-    <script type="module" src="main.js"></script>
     
 </body>
 </html>
