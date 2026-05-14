@@ -9,5 +9,11 @@ function doSomething(){
         alert("Input box is empty!");
     } else{
         alert("Input box is not empty!");
+        // Get the quiz container element from the page
+        const content = document.querySelector('.response');
+
+        // Clear previous quiz content
+        content.innerHTML = input;
+
     }
 }
