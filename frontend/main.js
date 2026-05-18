@@ -1,6 +1,9 @@
 const button = document.getElementById('submit')
 
+const input = document.getElementById('input');
+
 button.addEventListener("click", getResponse);
+
 
 const responseAPI = async(e) =>{
     // creates an asynchronous function Because fetch() takes time
@@ -37,8 +40,11 @@ const responseAPI = async(e) =>{
     // then the textbox becomes Hello
 }
 
+button.addEventListener("click", responseAPI);
+
 function getResponse(){
     const input = document.getElementById('submission').value;
+    // responseAPI();
 
     if (input.length == 0){
         alert("Input box is empty!");
@@ -46,8 +52,6 @@ function getResponse(){
         alert("Input box is not empty!");
         // Get the quiz container element from the page
         const content = document.querySelector('.response');
-
-        responseAPI();
         // Clear previous quiz content
         content.innerHTML = input;
 
