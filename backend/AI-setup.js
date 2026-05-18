@@ -15,21 +15,26 @@ const generationConfig = {
     responseMimeType: "text/plain",
 };
 
-async function run() {
+
+export async function run(questions) {
     try {
         //gemini gives a response
         const response = await ai.models.generateContent({
-            model: "gemini-3.1-flash-lite",
-            contents: "Explain what Node.js is in simple words.",
+            model: "gemini-2.5-flash",
+            contents: questions,
             generationConfig,
         });
 
-        // print AI response
-        console.log(response.text);
+        // setTimeout(myFunction, 15000)
 
+        // print AI response
+        // console.log(response.text);
+        return response.text;
     } catch (error) {
         console.error("Error:", error);
+        return "Error";
     }
 }
 
-run();
+// run("Explain what Node.js is in simple words.");
+// run(input);

@@ -1,3 +1,5 @@
+import {run} from './AI-setup.js'
+
 import express from 'express';
 // this imports the Express library
 // express is a framework that helps Node.js:
@@ -42,9 +44,12 @@ app.use(express.static('../frontend'));
    // style.css
 // then Express automatically serves them
 
-app.get('/message',(req, res) =>{
-    res.json({message: 'Hello, World!'});
+app.get('/message', async (req, res) =>{
+  const AI_response = await run("Explain what Node.js is in simple words.")
+    res.json({message: AI_response});
 })
+/// since run is async, the route itself has to also be async
+
 // this creates a GET route, this means when someone visits /message, run this function
 // req is the incoming request object
 // contains:
