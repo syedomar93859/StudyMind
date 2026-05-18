@@ -41,7 +41,7 @@
 // // so the browser renders it as a webpage.
 
 // // line 15 reads the HTML file asynchronously
-// // "Start reading the file, tell me when finished"
+// // Start reading the file, then it shows when finished
 // // ../frontend/index.html' means:
 // // go up one folder
 // // then enter frontend

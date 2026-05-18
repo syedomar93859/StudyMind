@@ -77,5 +77,5 @@ app.listen(port, ()=>{
 
 // Express automatically:
 
-// converts object → JSON
+// converts object to JSON
 // sets Content-Type to application/json
