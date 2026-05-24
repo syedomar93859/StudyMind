@@ -1,5 +1,6 @@
 import { run } from './AI-setup.js';
 import express from 'express';
+import { marked } from 'marked';
 
 const app = express();
 // Creates the Express server app
@@ -20,17 +21,23 @@ app.post('/message', async (req, res) => {
     const userQuestion = req.body.question;
     // Gets the question sent from the frontend
 
-    const AI_response = await run(userQuestion);
+    const aiResponse = await run(userQuestion);
     // Sends the question to Gemini and waits for the AI response
+
+    const finalMessage = marked.parse(aiResponse);
+    // converting markdown into html
 
     console.log(userQuestion);
     // Prints the user's question in the terminal
 
-    console.log(AI_response);
+    console.log(aiResponse);
     // Prints the AI response in the terminal
 
+    console.log(finalMessage);
+    // prints the converted response
+
     res.json({
-        message: AI_response 
+        message: finalMessage 
     })
     // Sends the AI response back to the frontend as JSON
 
