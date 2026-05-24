@@ -13,14 +13,27 @@ app.use(express.json());
 app.use(express.static('../frontend'));
 // Serves frontend files like index.html, CSS, and JS
 
-app.get('/message', async (req, res) => {
-    // Runs when the frontend sends a GET request to /message
 
-    const AI_response = await run("Explain what Node.js is in simple words.");
-    // Wait for Gemini to generate a response
+app.post('/message', async (req, res) => {
+    // Runs whenever the frontend sends a POST request to /message
 
-    res.json({ message: AI_response });
-    // Send the AI response back to the frontend as JSON
+    const userQuestion = req.body.question;
+    // Gets the question sent from the frontend
+
+    const AI_response = await run(userQuestion);
+    // Sends the question to Gemini and waits for the AI response
+
+    console.log(userQuestion);
+    // Prints the user's question in the terminal
+
+    console.log(AI_response);
+    // Prints the AI response in the terminal
+
+    res.json({
+        message: AI_response 
+    })
+    // Sends the AI response back to the frontend as JSON
+
 });
 
 app.listen(port, () => {
