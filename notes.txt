@@ -1,6 +1,7 @@
 important commands:
 npm init -y
 npm install express(npm i express)
+
 node welcome.js
 
 use this command to find the PID or the 3000 server:
@@ -17,4 +18,7 @@ npm install dotenv
 
 you have to create an a gemini api key:
 https://ai.google.dev/gemini-api/docs/quickstart
+
+this is for converting from markdown to html:
+npm install marked
 

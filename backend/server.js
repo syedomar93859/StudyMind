@@ -27,13 +27,13 @@ app.post('/message', async (req, res) => {
     const finalMessage = marked.parse(aiResponse);
     // converting markdown into html
 
-    console.log(userQuestion);
+    // console.log(userQuestion);
     // Prints the user's question in the terminal
 
-    console.log(aiResponse);
+    // console.log(aiResponse);
     // Prints the AI response in the terminal
 
-    console.log(finalMessage);
+    // console.log(finalMessage);
     // prints the converted response
 
     res.json({
@@ -45,5 +45,6 @@ app.post('/message', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
+    console.log(`Go to http://localhost:${port}/`)
 });
 // Starts the server

@@ -14,14 +14,14 @@ async function getResponse(){
         // Shows an alert if the user did not type anything
 
     } else{
-        alert("Input box is not empty!");
-        // Shows an alert if the textbox has content
+        const content = document.querySelector('.response');
+        // Gets the response div from the webpage
+
+        content.innerHTML = "Loading...";
+        // Tells the user that the AI response is currently being generated
 
         const result = await sendQuestion(input);
         // Sends the user's question to the backend and waits for the AI response
-
-        const content = document.querySelector('.response');
-        // Gets the response div from the webpage
 
         content.innerHTML = result;
         // Displays the AI response on the page
