@@ -1,3 +1,10 @@
+<!--
+Template based on "Dimension" by HTML5 UP
+https://html5up.net/dimension
+
+Modified by Syed Omar
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,19 +19,26 @@
     <link rel="stylesheet" href="styles.css">
     <script src= "main.js" defer ></script>
 </head>
-<body>
-    <h1>StudyMind: An AI Study Assistant</h1>
-    <p>This is a tool to ask an AI to learn, review and practice for any topic you want to know more about.</p>
+
+<body style="text-align:center;">
+    <h1>StudyMind
+        <span class="tooltip">
+        ⓘ
+            <span class="tooltiptext">
+                This is a tool to ask an AI to learn, review and practice for any topic you want to know more about.
+            </span>
+        </span>
+    </h1>
     <p>What do you want to ask?</p>
-    <!-- <input type="text" id="submission" placeholder="Some text..." > -->
     <textarea name="text" id="submission" placeholder="Some text..." ></textarea>
     <br><br>
-    <!-- <button style="font-size:25px; background-color: gray; color: lightblue; border-radius:15px;">Submit</button> -->
-    <!-- <button onclick="toggleSubmit(this)" data-language="Submission">Submit</button> -->
     <button id ="submit">Submit</button>
     <br>
     <p>AI Response:</p>
-    <div class="response"></div>
+    <div class="response">
+        <p>StudyMind will respond here...</p>
+    </div>
+
     
 </body>
 </html>
