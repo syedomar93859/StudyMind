@@ -14,7 +14,7 @@ const app = express();
 
 const port = 3000;
 // this is the port your server listens on
-// to your server becomes available at http://localhost:3000
+// to your server becomes available at http://127.0.0.1:3000/
 
 app.use(express.json());
 // this enables JSON parsing

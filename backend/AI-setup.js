@@ -7,6 +7,8 @@ const ai = new GoogleGenAI({
 });
 // Creates the Gemini AI client using the API key
 
+// console.log("API KEY LOADED:", process.env.GEMINI_API_KEY);
+
 const generationConfig = {
     temperature: 1,
     topP: 0.95,
@@ -30,8 +32,28 @@ export async function run(questions) {
 
     } catch (error) {
         console.error("Error:", error);
-        // Print errors in the terminal if something fails
+        console.error("Status:", error.status);
+        // Print error in the terminal if something fails
 
-        return "Error";
+        switch(error.status){ 
+            case 400: 
+                return "Error: Invalid request sent to AI" 
+            case 401: 
+                return "Error: Service configuration issue" 
+            case 403: 
+                return "Error: Access denied" 
+            case 404: 
+                return "Error: Resource not found" 
+            case 429: 
+                return "Error: Too many requests, please wait a moment" 
+            case 500: 
+                return "Error: AI service encountered an error" 
+            case 503: 
+                return "Error: AI service is temporarily experiencing high demand, please try again later" 
+            default: 
+                return "Error: An unexpected error happened" 
+        } 
+        // error handling for different error codes
     }
+    
 }

@@ -1,19 +1,33 @@
 import { run } from './AI-setup.js';
 import express from 'express';
 import { marked } from 'marked';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 // Creates the Express server app
 
 const port = 3000;
-// The server will run on http://localhost:3000
+// The server will run on http://127.0.0.1:3000/
 
 app.use(express.json());
 // Lets Express understand incoming JSON data
 
-app.use(express.static('../frontend'));
-// Serves frontend files like index.html, CSS, and JS
 
+const __filename = fileURLToPath(import.meta.url);
+// Gets the absolute file path of the current file (server.js)
+
+const __dirname = path.dirname(__filename);
+// Extracts the directory path that contains this file
+
+app.use(express.static(path.join(__dirname, '../frontend')));
+// Serves static frontend files (HTML, CSS, JS) from the frontend folder
+
+app.get('/test', (req, res) => {
+    res.send('server is working');
+});
+// Defines a test route to confirm the server is running correctly
+// When a GET request is made to /test, it sends a simple text response
 
 app.post('/message', async (req, res) => {
     // Runs whenever the frontend sends a POST request to /message
@@ -45,6 +59,6 @@ app.post('/message', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
-    console.log(`Go to http://localhost:${port}/`)
+    console.log(`Go to http://127.0.0.1:${port}/`)
 });
 // Starts the server

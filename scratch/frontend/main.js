@@ -12,12 +12,13 @@ const responseAPI = async(e) =>{
     // e is the event object, his line prevents default browser behavior
     // for buttons alone, it usually does nothing important here, you often see it in forms
 
-    const res = await fetch('http://localhost:3000/message',{
+    const res = await fetch('/message',{
         method: 'GET'
     });
-    // The browser sends an HTTP request to http://localhost:3000/message using GET method
-    // server responds with an HTTP response object, that gets stored in res
-    // this contains status code, headers, body, metadata
+    // Sends an HTTP GET request to the backend route /message
+    // The browser creates a request object and sends it to the server
+    // The server responds with an HTTP response object stored in 'res'
+    // This response contains status code, headers, and body data
 
     console.log(res);
 

@@ -29,7 +29,7 @@ async function getResponse(){
 }
 
 async function sendQuestion(question){
-    const response = await fetch('http://localhost:3000/message', {
+    const response = await fetch('/message', {
         method: 'POST',
         // Displays the AI response on the page
 
