@@ -51,3 +51,13 @@ async function sendQuestion(question){
     return data.message;
     // Returns only the AI response text
 }
+
+function goToAIPage() {
+    location.href = './ask-ai.html'
+}
+// navigates to the Ask AI page
+
+function goToHomePage() {
+    location.href = './index.html'
+}
+// navigates to the Home page
