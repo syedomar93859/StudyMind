@@ -63,3 +63,37 @@ body{
   /* this aligns the response text to the left */
   text-align: left; 
 }
+
+/* .main-buttons {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+} */
+
+.main-button {
+    background-color: #265B6A;
+    color: white;
+    padding: 10px 20px;
+    width: 150px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.main-button:hover {
+    background-color: #34748a;
+}
+
+.top-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}

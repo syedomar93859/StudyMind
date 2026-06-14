@@ -61,3 +61,8 @@ function goToHomePage() {
     location.href = './index.html'
 }
 // navigates to the Home page
+
+function goToNotesPage() {
+    location.href = './notes.html'
+}
+// navigates to the Notes page
