@@ -1,8 +1,13 @@
-const button = document.getElementById('submit')
+// 1. Get the submit button safely
+const button = document.getElementById('submit');
+
+// 2. ONLY attach the listener if the button actually exists on this page
+if (button) {
+    button.addEventListener("click", getResponse);
+    // Runs getResponse() whenever the button is clicked
+}
 // Gets the submit button from the webpage
 
-button.addEventListener("click", getResponse);
-// Runs getResponse() whenever the button is clicked
 
 async function getResponse(){
 
@@ -57,12 +62,21 @@ function goToAIPage() {
 }
 // navigates to the Ask AI page
 
-function goToHomePage() {
-    location.href = './index.html'
-}
-// navigates to the Home page
+// function goToHomePage() {
+//     location.href = './index.html'
+// }
+
 
 function goToNotesPage() {
     location.href = './notes.html'
 }
 // navigates to the Notes page
+
+const textLink = document.getElementById("clickable-text");
+
+if (textLink) {
+    textLink.addEventListener("click", () => {
+        location.href = './index.html';
+    });
+}
+// navigates to the Home page

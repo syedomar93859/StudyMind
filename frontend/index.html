@@ -15,14 +15,23 @@
     <script src= "main.js" defer ></script>
 </head>
 <body>
-    <div class="top-buttons">
-    <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
-        Ask AI
-    </button>
+    <div class="navigation">
+        <p>
+            <span id="clickable-text">StudyMind</span>
+        </p>
+        <!-- <p onclick="goToHomePage();">StudyMind</p> -->
+        <!-- <a href="home.html">StudyMind</a> -->
 
-    <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
-        Notes
-    </button>
-</div>
+        <div class="nav-buttons">
+            <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
+                Ask AI
+            </button>
+
+            <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
+                Notes
+            </button>
+        </div>
+
+    </div>
 </body>
 </html>

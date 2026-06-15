@@ -18,7 +18,24 @@
 </head>
 
 <body style="text-align:center;">
-    <button type="button" onclick="goToHomePage();">Home</button>
+    <div class="navigation">
+        <p>
+            <span id="clickable-text">StudyMind</span>
+        </p>
+
+        <div class="nav-buttons">
+            <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
+                Ask AI
+            </button>
+
+            <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
+                Notes
+            </button>
+        </div>
+
+    </div>
+
+    <!-- <button type="button" onclick="goToHomePage();">Home</button> -->
 
     <h1>StudyMind
         <span class="tooltip">
