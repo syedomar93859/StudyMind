@@ -126,3 +126,39 @@ body{
 #clickable-text:hover {
   opacity: 0.8;             
 }
+
+.home-details {
+    text-align: center;
+}
+
+.title {
+    margin-top: 150px;
+    font-size: 100px;
+}
+
+.subtitle {
+    font-size: 40px;
+}
+
+.front-button {
+    background-color: #02006c;
+    color: white;
+    padding: 10px 20px;
+    width: 120px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.introduction {
+  background-color: #1b2234;
+  color: #f3f4f6;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  margin-top: 160px;
+  /* this aligns the response text to the left */
+  text-align: left; 
+}
