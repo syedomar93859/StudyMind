@@ -81,14 +81,28 @@ if (textLink) {
 }
 // navigates to the Home page
 
-let notes = [];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// let notes = [];
 
 let editingNoteId = null;
 
-function loadNotes(){
-    const savedNotes = localStorage.getItem('quickNotes')
-    return savedNotes ? JSON.parse(savedNotes) : [];
-}
+// function loadNotes(){
+//     const savedNotes = localStorage.getItem('quickNotes')
+//     return savedNotes ? JSON.parse(savedNotes) : [];
+// }
 
 async function saveNote(event){
     event.preventDefault();
@@ -101,46 +115,51 @@ async function saveNote(event){
     if (editingNoteId){
         // Update existing note
 
-        const noteIndex = notes.findIndex(note => note.id === editingNoteId)
-        notes[noteIndex] = {
-            ...notes[noteIndex],
-            title: title,
-            content: content
-        }
+        const allNotes = await getAllNotes();
+
+        // const noteIndex = allNotes.findIndex(note => String(note.id) === String(editingNoteId));
+
+        await updateNote(editingNoteId, title, content);
+
+        // notes[noteIndex] = {
+        //     ...notes[noteIndex],
+        //     title: title,
+        //     content: content
+        // }
     }else{
-        sendInfo(title, content);
         
-        notes.unshift({
-            id: generateId,
-            title: title,
-            content: content
-        })
-        console.log("New note has been added. ID: " + newId + "Title: " + title + "Content: " + content)
+        // notes.unshift({
+        //     id: generateId,
+        //     title: title,
+        //     content: content
+        // })
+        const newId = await sendInfo(title, content);
+        console.log(newId);
     }
     
     closeNoteDialog();
-    saveNotes();
-    renderNotes();
+    await renderNotes();
 }
 
-function generateId(){
-    return Date.now().toString();
-}
+// function generateId(){
+//     return Date.now().toString();
+// }
 
-function saveNotes(){
-    localStorage.setItem('quickNotes', JSON.stringify(notes))
-}
+// function saveNotes(){
+//     localStorage.setItem('quickNotes', JSON.stringify(notes))
+// }
+
 
 function deleteNote(noteId){
-    notes = notes.filter(note => note.id !== noteId)
-    saveNotes();
-    renderNotes();
+    console.log("Delete note:", noteId);
 }
 
 async function renderNotes(){
     const notesContainer = document.getElementById('notesContainer');
 
-    if (notes.length === 0){
+    const allNotes = await getAllNotes();
+
+    if (allNotes.length === 0){
         // show some fall back elements
         notesContainer.innerHTML = `
         <div class="empty-state">
@@ -151,7 +170,6 @@ async function renderNotes(){
         `
         return
     }
-    const allNotes = await getAllNotes();
 
     // notes.forEach(note => {
     //     console.log(note.id);
@@ -174,9 +192,9 @@ async function renderNotes(){
     ).join(``);
 }
 
-function openNoteDialog(noteId = null){
-    console.log("Looking for noteId:", noteId, typeof noteId);
-    console.log("Available note IDs:", notes.map(n => ({ id: n.id, type: typeof n.id })));
+async function openNoteDialog(noteId = null){
+    // console.log("Looking for noteId:", noteId, typeof noteId);
+    // console.log("Available note IDs:", notes.map(n => ({ id: n.id, type: typeof n.id })));
 
     const dialog = document.getElementById('noteDialog');
     const titleInput = document.getElementById('noteTitle');
@@ -184,7 +202,10 @@ function openNoteDialog(noteId = null){
 
     if(noteId){
         // Edit note
-        const noteToEdit = notes.find(note => note.id === noteId);
+
+        const allNotes = await getAllNotes();
+
+        const noteToEdit = allNotes.find(note => String(note.id) === String(noteId));
         editingNoteId = noteId;
         document.getElementById('dialogTitle').textContent = 'Edit Note';
         titleInput.value = noteToEdit.title;
@@ -208,7 +229,7 @@ function closeNoteDialog(){
 
 document.addEventListener('DOMContentLoaded', function(){
 
-    notes = loadNotes();
+    // notes = loadNotes();
     renderNotes();
 
     document.getElementById('noteForm').addEventListener('submit', saveNote);
@@ -220,6 +241,9 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 })
 
+
+
+
 // function createTable(){
 //     const title = document.getElementById('title').value;
 //     const content = document.getElementById('content').value;
@@ -228,16 +252,31 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 async function getAllNotes() {
 
-    const response = await fetch("/random");
+    const response = await fetch("/notes");
 
     const data = await response.json();
-
-    const notes = data.notes;
-    let numNotes = notes.length;
-
-    console.log("There are " + numNotes + " notes");
 
     return data.notes;
 }
@@ -255,8 +294,29 @@ async function sendInfo(title, content) {
         })
     });
 
+    const data = await response.json();
+
+    return data.id;
+
+}
+
+async function updateNote(index, title, content) {
+
+    const response = await fetch("/update", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            index: index,
+            title: title,
+            content: content
+        })
+    });
+
     // const data = await response.json();
 
     // return data.id;
 
 }
+

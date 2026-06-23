@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
-import { add, insertNote, viewNoteTable, deleteNoteTable, sendAllNotes } from './app.js';
+import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes } from './app.js';
 
 
 
@@ -64,9 +64,9 @@ app.post('/message', async (req, res) => {
 });
 
 // This is connected with getInfo
-app.get("/random", async (req, res) => {
+app.get("/notes", async (req, res) => {
 
-    const notes = await sendAllNotes();
+    const notes = await getAllNotes();
 
     // notes.forEach(note => {
     //     console.log(note.id);
@@ -84,17 +84,18 @@ app.get("/random", async (req, res) => {
 
     res.json({
         // number: randomNumber,
+        success: true,
         notes: notes
     });
 });
 
 // This is connected with sendInfo function
-app.post("/test", (req, res) => {
+app.post("/test", async (req, res) => {
 
     const title = req.body.title;
     const content = req.body.content;
 
-    const newId = insertNote(title, content);
+    const newId = await insertNote(title, content);
     viewNoteTable();
     // deleteNoteTable();
     // viewNoteTable();
@@ -102,9 +103,26 @@ app.post("/test", (req, res) => {
     // console.log("Received from frontend:");
 
     res.json({
-        id: newId
+        id: newId,
+        success: true
     });
 });
+
+app.post("/update", async (req, res) => {
+
+    const title = req.body.title;
+    const content = req.body.content;
+    const index = req.body.index;
+
+    editNote(index, title, content);
+
+    viewNoteTable();
+
+    res.json({
+        success: true
+    });
+});
+
 
 
 

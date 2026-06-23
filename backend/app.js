@@ -8,26 +8,21 @@ export function subtract(a, b) {
     return a - b;
 }
 
-export function insertNote(title, content){
-    const sql = `INSERT INTO notes(title, content) VALUES(?, ?)`;
+export function insertNote(title, content) {
+    return new Promise((resolve, reject) => {
 
-    let newId;
+        const sql = `INSERT INTO notes(title, content) VALUES(?, ?)`;
 
-    db.run(
-        sql,
-        [title, content],
-        function(err) {
-            if (err) {
-                console.error(err.message);
-                return;
+        db.run(
+            sql,
+            [title, content],
+            function(err) {
+                if (err) return reject(err);
+
+                resolve(this.lastID);
             }
-
-            console.log("Note inserted.");
-            newId =  this.lastID;
-        }
-    );
-
-    return newId;
+        );
+    });
 }
 
 export function viewNoteTable(){
@@ -48,7 +43,7 @@ export function deleteNoteTable(){
     console.log("This should delete the table.");
 }
 
-export function sendAllNotes() {
+export function getAllNotes() {
     return new Promise((resolve, reject) => {
         const sql = `SELECT * FROM notes`;
 
@@ -57,6 +52,13 @@ export function sendAllNotes() {
             resolve(rows);
         });
     });
+}
+
+export function editNote(id, title, content){
+    sql = `UPDATE notes SET title = ?, content = ? WHERE id = ?`;
+    db.run(sql, [title, content, id], (err) =>{
+        if (err) return console.error(err.message);
+    })
 }
 
 // Connect to database
