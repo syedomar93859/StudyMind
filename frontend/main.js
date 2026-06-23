@@ -80,3 +80,183 @@ if (textLink) {
     });
 }
 // navigates to the Home page
+
+let notes = [];
+
+let editingNoteId = null;
+
+function loadNotes(){
+    const savedNotes = localStorage.getItem('quickNotes')
+    return savedNotes ? JSON.parse(savedNotes) : [];
+}
+
+async function saveNote(event){
+    event.preventDefault();
+    // this function stops the form from refreshing the page
+
+    const title = document.getElementById('noteTitle').value.trim();
+    const content = document.getElementById('noteContent').value.trim();
+
+
+    if (editingNoteId){
+        // Update existing note
+
+        const noteIndex = notes.findIndex(note => note.id === editingNoteId)
+        notes[noteIndex] = {
+            ...notes[noteIndex],
+            title: title,
+            content: content
+        }
+    }else{
+        sendInfo(title, content);
+        
+        notes.unshift({
+            id: generateId,
+            title: title,
+            content: content
+        })
+        console.log("New note has been added. ID: " + newId + "Title: " + title + "Content: " + content)
+    }
+    
+    closeNoteDialog();
+    saveNotes();
+    renderNotes();
+}
+
+function generateId(){
+    return Date.now().toString();
+}
+
+function saveNotes(){
+    localStorage.setItem('quickNotes', JSON.stringify(notes))
+}
+
+function deleteNote(noteId){
+    notes = notes.filter(note => note.id !== noteId)
+    saveNotes();
+    renderNotes();
+}
+
+async function renderNotes(){
+    const notesContainer = document.getElementById('notesContainer');
+
+    if (notes.length === 0){
+        // show some fall back elements
+        notesContainer.innerHTML = `
+        <div class="empty-state">
+        <h2>No notes yet</h2>
+        <p>Create your first note to get started!</n>
+        <button class="add-note-btn" onclick="openNoteDialog()">+ Add Your First Note</button>
+        </div>
+        `
+        return
+    }
+    const allNotes = await getAllNotes();
+
+    // notes.forEach(note => {
+    //     console.log(note.id);
+    //     console.log(note.title);
+    //     console.log(note.content);
+    // });
+
+    notesContainer.innerHTML = allNotes.map(note =>`
+        <div class="note-card">
+            <h3>${note.title}</h3>
+            <p class="note-content">${note.content}</p>
+            <div class ="note-actions">
+            <button class="edit-btn" onclick="openNoteDialog('${note.id}')" title="Edit Note"> ✏️
+            </button>
+            <button class="delete-btn" onclick="deleteNote('${note.id}')" title="Delete Note"> ❌
+            </button>
+            </div>
+        </div>
+        `
+    ).join(``);
+}
+
+function openNoteDialog(noteId = null){
+    console.log("Looking for noteId:", noteId, typeof noteId);
+    console.log("Available note IDs:", notes.map(n => ({ id: n.id, type: typeof n.id })));
+
+    const dialog = document.getElementById('noteDialog');
+    const titleInput = document.getElementById('noteTitle');
+    const contentInput = document.getElementById('noteContent');
+
+    if(noteId){
+        // Edit note
+        const noteToEdit = notes.find(note => note.id === noteId);
+        editingNoteId = noteId;
+        document.getElementById('dialogTitle').textContent = 'Edit Note';
+        titleInput.value = noteToEdit.title;
+        contentInput.value = noteToEdit.content;
+
+    }else{
+        // Add Note
+        editingNoteId = null
+        document.getElementById('dialogTitle').textContent = 'Add New Note'
+        titleInput.value = '';
+        contentInput.value = '';
+    }
+
+    dialog.showModal();
+    titleInput.focus();
+}
+
+function closeNoteDialog(){
+    document.getElementById('noteDialog').close();
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+
+    notes = loadNotes();
+    renderNotes();
+
+    document.getElementById('noteForm').addEventListener('submit', saveNote);
+
+    document.getElementById('noteDialog').addEventListener('click', function(event){
+        if(event.target === this){
+            closeNoteDialog();
+        }
+    })
+})
+
+// function createTable(){
+//     const title = document.getElementById('title').value;
+//     const content = document.getElementById('content').value;
+//     const message = `Title: ${title}, Content: ${content}`;
+//     alert(message);
+
+// }
+
+async function getAllNotes() {
+
+    const response = await fetch("/random");
+
+    const data = await response.json();
+
+    const notes = data.notes;
+    let numNotes = notes.length;
+
+    console.log("There are " + numNotes + " notes");
+
+    return data.notes;
+}
+
+async function sendInfo(title, content) {
+
+    const response = await fetch("/test", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: title,
+            content: content
+        })
+    });
+
+    // const data = await response.json();
+
+    // return data.id;
+
+}

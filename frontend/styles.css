@@ -152,6 +152,10 @@ body{
 
 }
 
+.front-button:hover {
+    background-color: #0E4C61;;
+}
+
 .introduction {
   background-color: #1b2234;
   color: #f3f4f6;
@@ -159,7 +163,126 @@ body{
   padding: 20px;
   max-width: 1200px;
   margin: 20px auto;
-  margin-top: 160px;
+  margin-top: 120px;
   /* this aligns the response text to the left */
   text-align: left; 
+}
+
+.notes-grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1600px;
+    margin: 5px auto 0 auto;
+    padding: 20px;
+}
+
+/* top:    120px
+right:  auto
+bottom: 0
+left:   auto */
+
+
+.note-card{
+    background-color: #1D647B;
+    padding: 15px;
+    border-radius: 8px;
+    overflow: auto
+}
+.dialog-content {
+  width: 350px;
+  height: auto; /* let it grow naturally */
+  padding: 16px;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-title{
+  color: white;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 10px 20px; */
+    padding: 0px 20px;
+    /* font-size: 10px; */
+}
+
+
+h1 {
+    font-size: 30px;
+}
+
+.edit-btn{
+  background: transparent;
+  border: none;
+}
+
+.delete-btn{
+  background: transparent;
+  border: none;
+}
+
+.close-btn{
+  color: black;
+}
+
+.add-note-btn{
+  background-color: #1D647B;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.submit-btn{
+  background-color: #1D647B;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-label {
+  margin-bottom: 4px;
+  color: white; /* so it's visible against #84B5C5 background */
+}
+
+/* .form-input{
+  color: pink;
+} */
+
+.form-textarea{
+  max-width: 350px;
+}
+
+/* .dialog-actions{
+  color: black;
+} */
+
+/* .cancel-btn{
+  color: lightblue;
+} */
+
+/* .save-btn{
+  color: lightcoral;
+} */
+
+.full-dialog{
+  background-color: #84B5C5;
 }

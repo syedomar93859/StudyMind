@@ -1,0 +1,96 @@
+import sqlite3 from 'sqlite3';
+
+export function add(a, b) {
+    return a + b;
+}
+
+export function subtract(a, b) {
+    return a - b;
+}
+
+export function insertNote(title, content){
+    const sql = `INSERT INTO notes(title, content) VALUES(?, ?)`;
+
+    let newId;
+
+    db.run(
+        sql,
+        [title, content],
+        function(err) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+
+            console.log("Note inserted.");
+            newId =  this.lastID;
+        }
+    );
+
+    return newId;
+}
+
+export function viewNoteTable(){
+    // Query data AFTER insert finishes
+    const sql = `SELECT * FROM notes`;
+
+    db.all(sql, [], (err, rows) => {
+        if (err) return console.error(err.message);
+
+        rows.forEach((row) => {
+            console.log(row);
+        });
+    });
+}
+
+export function deleteNoteTable(){
+    db.run("DROP TABLE notes")
+    console.log("This should delete the table.");
+}
+
+export function sendAllNotes() {
+    return new Promise((resolve, reject) => {
+        const sql = `SELECT * FROM notes`;
+
+        db.all(sql, [], (err, rows) => {
+            if (err) return reject(err);
+            resolve(rows);
+        });
+    });
+}
+
+// Connect to database
+const db = new sqlite3.Database(
+    './studymind.db',
+    sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+    (err) => {
+        if (err) return console.error(err.message);
+        console.log('Connected to database.');
+    }
+);
+
+let sql;
+
+// Create table
+sql = `
+CREATE TABLE IF NOT EXISTS notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    content TEXT
+)
+`;
+
+db.run(sql, (err) => {
+    if (err) return console.error(err.message);
+
+    // console.log("Table created.");
+
+
+
+
+
+    // Insert note AFTER table exists
+
+
+    // dropping the table
+});

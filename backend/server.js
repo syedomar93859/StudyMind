@@ -4,6 +4,12 @@ import { marked } from 'marked';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// This executes the code in app.js
+import { add, insertNote, viewNoteTable, deleteNoteTable, sendAllNotes } from './app.js';
+
+
+
+
 const app = express();
 // Creates the Express server app
 
@@ -57,8 +63,55 @@ app.post('/message', async (req, res) => {
 
 });
 
+// This is connected with getInfo
+app.get("/random", async (req, res) => {
+
+    const notes = await sendAllNotes();
+
+    // notes.forEach(note => {
+    //     console.log(note.id);
+    //     console.log(note.title);
+    //     console.log(note.content);
+    // });
+
+    
+    // sum = add(2, 3);
+    // console.log(subtract(10, 4));
+
+    // const randomNumber =
+    //     // Math.floor(Math.random() * 100);
+    //     add(2, 3);
+
+    res.json({
+        // number: randomNumber,
+        notes: notes
+    });
+});
+
+// This is connected with sendInfo function
+app.post("/test", (req, res) => {
+
+    const title = req.body.title;
+    const content = req.body.content;
+
+    const newId = insertNote(title, content);
+    viewNoteTable();
+    // deleteNoteTable();
+    // viewNoteTable();
+
+    // console.log("Received from frontend:");
+
+    res.json({
+        id: newId
+    });
+});
+
+
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
     console.log(`Go to http://127.0.0.1:${port}/`)
 });
 // Starts the server
+
+
