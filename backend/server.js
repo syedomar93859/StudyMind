@@ -5,7 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
-import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes } from './app.js';
+import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote } from './app.js';
 
 
 
@@ -115,6 +115,20 @@ app.post("/update", async (req, res) => {
     const index = req.body.index;
 
     editNote(index, title, content);
+
+    viewNoteTable();
+
+    res.json({
+        success: true
+    });
+});
+
+
+app.post("/delete", async (req, res) => {
+
+    const deleteId = req.body.id;
+
+    await removeNote(deleteId);
 
     viewNoteTable();
 

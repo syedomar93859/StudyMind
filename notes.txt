@@ -22,3 +22,7 @@ https://ai.google.dev/gemini-api/docs/quickstart
 this is for converting from markdown to html:
 npm install marked
 
+Implement these later:
+Ask the user after they have decided to click the delete button
+Login system
+Make sure note titles are fully visible

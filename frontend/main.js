@@ -150,9 +150,6 @@ async function saveNote(event){
 // }
 
 
-function deleteNote(noteId){
-    console.log("Delete note:", noteId);
-}
 
 async function renderNotes(){
     const notesContainer = document.getElementById('notesContainer');
@@ -319,4 +316,29 @@ async function updateNote(index, title, content) {
     // return data.id;
 
 }
+
+
+// function deleteNote(noteId){
+//     console.log("Delete note:", noteId);
+// }
+
+async function deleteNote(id) {
+
+    const response = await fetch("/delete", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: id
+        })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+        await renderNotes();
+    }
+}
+
 

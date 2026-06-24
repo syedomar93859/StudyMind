@@ -54,11 +54,41 @@ export function getAllNotes() {
     });
 }
 
-export function editNote(id, title, content){
-    sql = `UPDATE notes SET title = ?, content = ? WHERE id = ?`;
-    db.run(sql, [title, content, id], (err) =>{
-        if (err) return console.error(err.message);
-    })
+// removeNote(deleteId)
+
+export function removeNote(deleteId) {
+    return new Promise((resolve, reject) => {
+
+        const sql = `DELETE FROM notes WHERE id = ?`
+
+        db.run(sql, [deleteId], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
+}
+
+export function editNote(id, title, content) {
+    return new Promise((resolve, reject) => {
+
+        const sql =
+            `UPDATE notes
+             SET title = ?, content = ?
+             WHERE id = ?`;
+
+        db.run(sql, [title, content, id], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
 }
 
 // Connect to database
