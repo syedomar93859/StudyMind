@@ -114,15 +114,4 @@ CREATE TABLE IF NOT EXISTS notes (
 
 db.run(sql, (err) => {
     if (err) return console.error(err.message);
-
-    // console.log("Table created.");
-
-
-
-
-
-    // Insert note AFTER table exists
-
-
-    // dropping the table
 });

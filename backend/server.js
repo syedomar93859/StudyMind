@@ -68,22 +68,7 @@ app.get("/notes", async (req, res) => {
 
     const notes = await getAllNotes();
 
-    // notes.forEach(note => {
-    //     console.log(note.id);
-    //     console.log(note.title);
-    //     console.log(note.content);
-    // });
-
-    
-    // sum = add(2, 3);
-    // console.log(subtract(10, 4));
-
-    // const randomNumber =
-    //     // Math.floor(Math.random() * 100);
-    //     add(2, 3);
-
     res.json({
-        // number: randomNumber,
         success: true,
         notes: notes
     });
@@ -97,10 +82,6 @@ app.post("/test", async (req, res) => {
 
     const newId = await insertNote(title, content);
     viewNoteTable();
-    // deleteNoteTable();
-    // viewNoteTable();
-
-    // console.log("Received from frontend:");
 
     res.json({
         id: newId,

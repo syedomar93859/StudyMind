@@ -82,27 +82,8 @@ if (textLink) {
 // navigates to the Home page
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let notes = [];
-
 let editingNoteId = null;
 
-// function loadNotes(){
-//     const savedNotes = localStorage.getItem('quickNotes')
-//     return savedNotes ? JSON.parse(savedNotes) : [];
-// }
 
 async function saveNote(event){
     event.preventDefault();
@@ -117,22 +98,10 @@ async function saveNote(event){
 
         const allNotes = await getAllNotes();
 
-        // const noteIndex = allNotes.findIndex(note => String(note.id) === String(editingNoteId));
-
         await updateNote(editingNoteId, title, content);
 
-        // notes[noteIndex] = {
-        //     ...notes[noteIndex],
-        //     title: title,
-        //     content: content
-        // }
     }else{
         
-        // notes.unshift({
-        //     id: generateId,
-        //     title: title,
-        //     content: content
-        // })
         const newId = await sendInfo(title, content);
         console.log(newId);
     }
@@ -140,15 +109,6 @@ async function saveNote(event){
     closeNoteDialog();
     await renderNotes();
 }
-
-// function generateId(){
-//     return Date.now().toString();
-// }
-
-// function saveNotes(){
-//     localStorage.setItem('quickNotes', JSON.stringify(notes))
-// }
-
 
 
 async function renderNotes(){
@@ -168,12 +128,6 @@ async function renderNotes(){
         return
     }
 
-    // notes.forEach(note => {
-    //     console.log(note.id);
-    //     console.log(note.title);
-    //     console.log(note.content);
-    // });
-
     notesContainer.innerHTML = allNotes.map(note =>`
         <div class="note-card">
             <h3>${note.title}</h3>
@@ -190,8 +144,6 @@ async function renderNotes(){
 }
 
 async function openNoteDialog(noteId = null){
-    // console.log("Looking for noteId:", noteId, typeof noteId);
-    // console.log("Available note IDs:", notes.map(n => ({ id: n.id, type: typeof n.id })));
 
     const dialog = document.getElementById('noteDialog');
     const titleInput = document.getElementById('noteTitle');
@@ -226,7 +178,6 @@ function closeNoteDialog(){
 
 document.addEventListener('DOMContentLoaded', function(){
 
-    // notes = loadNotes();
     renderNotes();
 
     document.getElementById('noteForm').addEventListener('submit', saveNote);
@@ -237,35 +188,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     })
 })
-
-
-
-
-// function createTable(){
-//     const title = document.getElementById('title').value;
-//     const content = document.getElementById('content').value;
-//     const message = `Title: ${title}, Content: ${content}`;
-//     alert(message);
-
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -311,18 +233,19 @@ async function updateNote(index, title, content) {
         })
     });
 
-    // const data = await response.json();
-
-    // return data.id;
 
 }
 
 
-// function deleteNote(noteId){
-//     console.log("Delete note:", noteId);
-// }
-
 async function deleteNote(id) {
+
+    const confirmed = confirm(
+        "Are you sure you want to delete this note?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
 
     const response = await fetch("/delete", {
         method: "POST",
@@ -340,5 +263,4 @@ async function deleteNote(id) {
         await renderNotes();
     }
 }
-
 
