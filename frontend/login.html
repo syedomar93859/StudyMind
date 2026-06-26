@@ -13,7 +13,7 @@
     <!-- the 3 lines above load the inter font from google fonts -->
      
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/login.css">
     <script src= "js/login.js" defer ></script>
 </head>
 <body class="login-page">
@@ -27,12 +27,12 @@
             </div>
             <form action="#" class="login-form" autocomplete="off">
                 <div class = "input-box">
-                    <input type="text" class="input-field" id="log-email">
+                    <input type="text" class="input-field" id="log-email" required>
                     <label for="log-email" class="label">Email</label>
                     <i class="bx bx-envelope icon"></i>
                 </div>
                 <div class = "input-box">
-                    <input type="password" class="input-field" id="log-pass">
+                    <input type="password" class="input-field" id="log-pass" required>
                     <label for="log-pass" class="label">Password</label>
                     <i class="bx bx-lock-alt icon"></i>
                 </div>
@@ -46,8 +46,9 @@
                     <button class="btn-submit" id="signInBtn">Sign In <i class="bx bx-log-in"></i>
                     </button>
                 </div>
-                <div class="switch-form"></div>
-                <span>Don't have an account <a href="#">Register</a></span>
+                <div class="switch-form">
+                <span>Don't have an account? <a href="#">Register</a></span>
+                </div>
             </form>
     </div>
 </body>
