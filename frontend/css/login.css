@@ -34,7 +34,6 @@ a:hover{
   justify-content: center;
   align-items: center;
   height: 100vh;
-  /* background-color: #EFEFEF; */
 }
 
 .wrapper{
@@ -48,7 +47,11 @@ a:hover{
   border-radius: 15px;
   padding: 100px 32px 64px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+
+  /* smoothly animates the height when switching forms */
   transition: 0.3s;
+
+  /* hides the form while it slides outside the box */
   overflow: hidden;
 }
 
@@ -103,22 +106,31 @@ a:hover{
   color: #FFF;
   font-size: 28px;
   font-weight: 600;
+
+  /* smoothly animates the title moving and fading */
   transition: 0.3s;
 }
 
 .title-register{
+  /* hide the Register title above the header at first */
   top: 50px;
+  opacity: 0;
 }
 
 .login-form, .register-form{
   position: absolute;
+
+  /* starts both forms centered horizontally */
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
+
+  /* smoothly animates position and opacity changes from JavaScript */
   transition: 0.3s;
 }
 
 .register-form{
+  /* starts the register form off-screen to the right */
   left: 150%;
 }
 
@@ -134,7 +146,7 @@ a:hover{
   height: 55px;
   font-size: 16px;
   background: transparent;
-  color: #000;
+  color: white;
   padding: 0 20px;
   border: 1px solid #e3e4e6;
   border-radius: 30px;
@@ -166,7 +178,7 @@ a:hover{
 }
 
 .input-field:valid ~ .label{
-    color: white;
+    color: black;;
 }
 
 .icon{
