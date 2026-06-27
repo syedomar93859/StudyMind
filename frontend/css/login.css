@@ -49,6 +49,7 @@ a:hover{
   padding: 100px 32px 64px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   transition: 0.3s;
+  overflow: hidden;
 }
 
 .form-header{
@@ -94,7 +95,7 @@ a:hover{
   position: relative;
 }
 
-.title-login{
+.title-login, .title-register{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -105,12 +106,20 @@ a:hover{
   transition: 0.3s;
 }
 
-.login-form{
+.title-register{
+  top: 50px;
+}
+
+.login-form, .register-form{
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
   transition: 0.3s;
+}
+
+.register-form{
+  left: 150%;
 }
 
 .input-box{
