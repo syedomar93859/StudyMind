@@ -140,6 +140,26 @@ export function viewAccountTable(){
     });
 }
 
+export function checkAccountExists(email, password) {
+    return new Promise((resolve, reject) => {
+
+        const sql = `SELECT * FROM accounts WHERE email = ? AND encrypt_pass = ?`
+        
+        db.get(sql, [email, password], function(err, row) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            if (row) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+}
+
 
 
 // // Create table

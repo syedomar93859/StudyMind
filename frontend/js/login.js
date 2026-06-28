@@ -50,7 +50,7 @@ function registerFunction(){
     registerTitle.style.opacity = 1;
 }
 
-document.getElementById("signUpBtn").addEventListener("click", function() {
+document.getElementById("signUpBtn").addEventListener("click", async function() {
   const regName = document.getElementById("reg-name").value;
   const regEmail = document.getElementById("reg-email").value;
   const regPass = document.getElementById("reg-pass").value;
@@ -58,15 +58,23 @@ document.getElementById("signUpBtn").addEventListener("click", function() {
 
   if (regName != "" && regEmail != "" && regPass != "" && agreed) {
     alert("Your username is " + regName + " and your email is " + regEmail + " and your password is " + regPass + " and you have checked the box");
-    const id = createAccount(regName, regEmail, regPass);
+    const id = await createAccount(regName, regEmail, regPass);
   }
 });
 
-document.getElementById("signInBtn").addEventListener("click", function() {
+document.getElementById("signInBtn").addEventListener("click", async function() {
     const logEmail = document.getElementById("log-email").value;
     const logPass = document.getElementById("log-pass").value;
     if (logEmail!= "" && logPass != "") {
-        alert("Your email is " + logEmail + " and your password is " + logPass);
+        // alert("Your email is " + logEmail + " and your password is " + logPass);
+        const truth = await findAccount(logEmail, logPass);
+
+        if(truth){
+          alert("Account exists!");
+          goToHomePage();
+        }else{
+          alert("Account does not exist!")
+        }
 }
 });
 
@@ -88,4 +96,27 @@ async function createAccount(username, email, password) {
 
     return data.id;
 
+}
+
+async function findAccount(email, password) {
+
+    const response = await fetch("/check", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email,
+            pass: password
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
+}
+
+function goToHomePage() {
+    location.href = './home.html'
 }

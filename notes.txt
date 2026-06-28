@@ -26,3 +26,10 @@ Implement these later:
 Ask the user after they have decided to click the delete button
 Login system
 Make sure note titles are fully visible
+Add settings to log out
+Check if password is strong
+Tell the user that the checkbox has not been checked
+during registration prevent duplicate accounts
+after clicking sign up on the registration page and the details enter are valid, go back to the login page
+make sure notes are tied to accounts
+passwords need to be encrypted

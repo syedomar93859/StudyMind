@@ -3,7 +3,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMind | Home</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <title>StudyMind | Login & Register</title>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,67 +13,83 @@
     <!-- the 3 lines above load the inter font from google fonts -->
      
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="css/home.css">
-    <script src= "js/home.js" defer ></script>
+    <link rel="stylesheet" href="css/login.css">
+    <script src= "js/login.js" defer ></script>
 </head>
-<body>
-    <div class="navigation">
-        <p>
-            <span id="clickable-text">StudyMind</span>
-        </p>
-        <!-- <p onclick="goToHomePage();">StudyMind</p> -->
-        <!-- <a href="home.html">StudyMind</a> -->
+<body class="login-page">
+    <div class = "wrapper">
+        <div class="form-header">
+            <div class="titles">
+                <div class="title-login">
+                    Login
+                </div>
+                <div class="title-register">
+                    Register
+                </div>
+            </div>
+            </div>
 
-        <div class="nav-buttons">
-            <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
-                Ask AI
-            </button>
+            <!-- login form -->
+            <form action="#" class="login-form" autocomplete="off">
+                <div class = "input-box">
+                    <input type="text" class="input-field" id="log-email" required>
+                    <label for="log-email" class="label">Email</label>
+                    <i class="bx bx-envelope icon"></i>
+                </div>
+                <div class = "input-box">
+                    <input type="password" class="input-field" id="log-pass" required>
+                    <label for="log-pass" class="label">Password</label>
+                    <i class="bx bx-lock-alt icon"></i>
+                </div>
+                <div class="form-cols">
+                    <div class="col-1"></div>
+                    <div class="col-2">
+                        <a href="#">Forgot Password</a>
+                    </div>
+                </div>
+                <div class="input-box">
+                    <button class="btn-submit" id="signInBtn">Sign In <i class="bx bx-log-in"></i>
+                    </button>
+                </div>
+                <div class="switch-form">
+                <span>Don't have an account? <a href="#" onclick="registerFunction();">Register</a></span>
+                </div>
+            </form>
 
-            <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
-                Notes
-            </button>
-        </div>
+            <!-- register form -->
+            <form action="#" class="register-form" autocomplete="off">
+                <div class = "input-box">
+                    <input type="text" class="input-field" id="reg-name" required>
+                    <label for="reg-name" class="label">Username</label>
+                    <i class="bx bx-user icon"></i>
+                </div>
+                <div class = "input-box">
+                    <input type="text" class="input-field" id="reg-email" required>
+                    <label for="reg-email" class="label">Email</label>
+                    <i class="bx bx-envelope icon"></i>
+                </div>
+                <div class = "input-box">
+                    <input type="password" class="input-field" id="reg-pass" required>
+                    <label for="reg-pass" class="label">Password</label>
+                    <i class="bx bx-lock-alt icon"></i>
+                </div>
+                <div class="form-cols">
+                    <div class="col-1">
+                        <input type="checkbox" id="agree">
+                        <label for="agree"> I agree to terms & conditions</label>
+                    </div>
 
+                    <div class="col-2">
+                    </div>
+                </div>
+                <div class="input-box">
+                    <button class="btn-submit" id="signUpBtn">Sign Up <i class="bx bx-log-out"></i>
+                    </button>
+                </div>
+                <div class="switch-form">
+                <span>Already have an account? <a href="#" onclick="loginFunction();" >Login</a></span>
+                </div>
+            </form>
     </div>
-
-    <div class="home-details">
-        <h1 class="title">StudyMind</h1>
-        <p class="subtitle">AI-powered studying and note management</p>
-        
-        <button class="front-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
-                Ask AI
-        </button>
-
-        <button class="front-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
-                Notes
-        </button>
-
-    </div>
-
-    <div class="introduction">
-        <h2>
-            What is StudyMind?
-        </h2>
-
-        <p>
-            StudyMind is a platform designed to help students learn, study, and stay organized.
-        </p>
-
-        <p>
-            <strong>
-                Ask AI
-            </strong> 
-            allows students to ask questions and receive AI-powered explanations on a wide range of topics.
-        </p>
-
-        <p>
-            <strong>
-                Notes
-            </strong> 
-            allows students to create, edit, and organize notes for studying, reviewing material, and keeping track of important information.
-        </p>
-</div>
-
- 
 </body>
 </html>

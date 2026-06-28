@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
 import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote, 
-    insertAccount, viewAccountTable } from './app.js';
+    insertAccount, viewAccountTable, checkAccountExists } from './app.js';
 
 
 
@@ -142,6 +142,21 @@ app.post("/register", async (req, res) => {
 
     res.json({
         id: accountId,
+        success: true
+    });
+});
+
+// this is connecting with createAccount
+app.post("/check", async (req, res) => {
+
+    const email = req.body.email;
+    const password = req.body.pass;
+
+    const found = await checkAccountExists(email, password);
+    viewAccountTable();
+
+    res.json({
+        truth: found,
         success: true
     });
 });

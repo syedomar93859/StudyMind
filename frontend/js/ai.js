@@ -76,7 +76,7 @@ const textLink = document.getElementById("clickable-text");
 
 if (textLink) {
     textLink.addEventListener("click", () => {
-        location.href = './index.html';
+        location.href = './home.html';
     });
 }
 // navigates to the Home page
