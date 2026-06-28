@@ -1,4 +1,7 @@
 import sqlite3 from 'sqlite3';
+import fs from "fs";
+
+
 
 export function add(a, b) {
     return a + b;
@@ -101,17 +104,21 @@ const db = new sqlite3.Database(
     }
 );
 
-let sql;
+const sql = fs.readFileSync("./schema.sql", "utf8");
 
-// Create table
-sql = `
-CREATE TABLE IF NOT EXISTS notes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    content TEXT
-)
-`;
+// // Create table
+// sql = `
+// CREATE TABLE IF NOT EXISTS notes (
+//     id INTEGER PRIMARY KEY AUTOINCREMENT,
+//     title TEXT,
+//     content TEXT
+// )
+// `;
 
-db.run(sql, (err) => {
-    if (err) return console.error(err.message);
+// db.run(sql, (err) => {
+//     if (err) return console.error(err.message);
+// });
+
+db.exec(sql, (err) => {
+    if (err) console.error(err);
 });
