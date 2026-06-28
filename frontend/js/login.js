@@ -58,6 +58,7 @@ document.getElementById("signUpBtn").addEventListener("click", function() {
 
   if (regName != "" && regEmail != "" && regPass != "" && agreed) {
     alert("Your username is " + regName + " and your email is " + regEmail + " and your password is " + regPass + " and you have checked the box");
+    const id = createAccount(regName, regEmail, regPass);
   }
 });
 
@@ -68,3 +69,23 @@ document.getElementById("signInBtn").addEventListener("click", function() {
         alert("Your email is " + logEmail + " and your password is " + logPass);
 }
 });
+
+async function createAccount(username, email, password) {
+
+    const response = await fetch("/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: username,
+            email: email,
+            pass: password
+        })
+    });
+
+    const data = await response.json();
+
+    return data.id;
+
+}

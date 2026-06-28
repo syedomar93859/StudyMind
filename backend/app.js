@@ -106,6 +106,42 @@ const db = new sqlite3.Database(
 
 const sql = fs.readFileSync("./schema.sql", "utf8");
 
+
+
+
+export function insertAccount(username, email, password) {
+    return new Promise((resolve, reject) => {
+
+        const sql = `INSERT INTO accounts(username, email, encrypt_pass) VALUES(?, ?, ?)`;
+
+        db.run(
+            sql,
+            [username, email, password],
+            function(err) {
+                if (err) return reject(err);
+
+                resolve(this.lastID);
+            }
+        );
+    });
+}
+
+
+export function viewAccountTable(){
+    // Query data AFTER insert finishes
+    const sql = `SELECT * FROM accounts`;
+
+    db.all(sql, [], (err, rows) => {
+        if (err) return console.error(err.message);
+
+        rows.forEach((row) => {
+            console.log(row);
+        });
+    });
+}
+
+
+
 // // Create table
 // sql = `
 // CREATE TABLE IF NOT EXISTS notes (

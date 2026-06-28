@@ -5,7 +5,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
-import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote } from './app.js';
+import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote, 
+    insertAccount, viewAccountTable } from './app.js';
+
 
 
 
@@ -128,3 +130,18 @@ app.listen(port, () => {
 // Starts the server
 
 
+// this is connecting with createAccount
+app.post("/register", async (req, res) => {
+
+    const username = req.body.name;
+    const email = req.body.email;
+    const password = req.body.pass;
+
+    const accountId = await insertAccount(username, email, password);
+    viewAccountTable();
+
+    res.json({
+        id: accountId,
+        success: true
+    });
+});
