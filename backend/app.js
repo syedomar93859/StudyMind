@@ -11,14 +11,14 @@ export function subtract(a, b) {
     return a - b;
 }
 
-export function insertNote(title, content) {
+export function insertNote(accountId, title, content) {
     return new Promise((resolve, reject) => {
 
-        const sql = `INSERT INTO notes(title, content) VALUES(?, ?)`;
+        const sql = `INSERT INTO notes(account_id, title, content) VALUES(?, ?, ?)`;
 
         db.run(
             sql,
-            [title, content],
+            [accountId, title, content],
             function(err) {
                 if (err) return reject(err);
 
@@ -46,11 +46,11 @@ export function deleteNoteTable(){
     console.log("This should delete the table.");
 }
 
-export function getAllNotes() {
+export function getAllNotes(accountId) {
     return new Promise((resolve, reject) => {
-        const sql = `SELECT * FROM notes`;
+        const sql = `SELECT * FROM notes WHERE account_id = ?`;
 
-        db.all(sql, [], (err, rows) => {
+        db.all(sql, [accountId], (err, rows) => {
             if (err) return reject(err);
             resolve(rows);
         });
@@ -59,12 +59,12 @@ export function getAllNotes() {
 
 // removeNote(deleteId)
 
-export function removeNote(deleteId) {
+export function removeNote(deleteId, accountId) {
     return new Promise((resolve, reject) => {
 
-        const sql = `DELETE FROM notes WHERE id = ?`
+        const sql = `DELETE FROM notes WHERE id = ? AND account_id = ?`
 
-        db.run(sql, [deleteId], function(err) {
+        db.run(sql, [deleteId, accountId], function(err) {
 
             if (err) {
                 return reject(err);
@@ -75,15 +75,13 @@ export function removeNote(deleteId) {
     });
 }
 
-export function editNote(id, title, content) {
+export function editNote(accountId, noteId, title, content) {
     return new Promise((resolve, reject) => {
 
         const sql =
-            `UPDATE notes
-             SET title = ?, content = ?
-             WHERE id = ?`;
+            `UPDATE notes SET title=?, content=? WHERE id=? AND account_id=?`;
 
-        db.run(sql, [title, content, id], function(err) {
+        db.run(sql, [title, content, noteId, accountId], function(err) {
 
             if (err) {
                 return reject(err);

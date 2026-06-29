@@ -1,3 +1,5 @@
+import {setUser, getAccountId, getUsername} from './session.js';
+
 function goToAIPage() {
     location.href = './ask-ai.html'
 }
@@ -37,13 +39,13 @@ async function saveNote(event){
     if (editingNoteId){
         // Update existing note
 
-        const allNotes = await getAllNotes();
+        const allNotes = await getAllNotes(getAccountId());
 
-        await updateNote(editingNoteId, title, content);
+        await updateNote(getAccountId(), editingNoteId, title, content);
 
     }else{
         
-        const newId = await sendInfo(title, content);
+        const newId = await sendInfo(getAccountId(), title, content);
         console.log(newId);
     }
     
@@ -53,19 +55,28 @@ async function saveNote(event){
 
 
 async function renderNotes(){
-    const notesContainer = document.getElementById('notesContainer');
 
-    const allNotes = await getAllNotes();
+    console.log("accountId is:", getAccountId());
+    const notesContainer = document.getElementById('notesContainer');
+    const manyNotes = await getAllNotes(getAccountId());
+    console.log("allNotes:", manyNotes);
+
+    const allNotes = await getAllNotes(getAccountId());
+
+    console.log(allNotes);
+    console.log(allNotes.length);
 
     if (allNotes.length === 0){
         // show some fall back elements
-        notesContainer.innerHTML = `
-        <div class="empty-state">
+        notesContainer.innerHTML = `<div class="empty-state">
         <h2>No notes yet</h2>
-        <p>Create your first note to get started!</n>
-        <button class="add-note-btn" onclick="openNoteDialog()">+ Add Your First Note</button>
-        </div>
-        `
+        <p>Create your first note to get started!</p>
+        <button id="firstNoteBtn" class="add-note-btn">
+        + Add Your First Note
+        </button>
+        </div>`;
+        
+        document.getElementById("firstNoteBtn").addEventListener("click", () => openNoteDialog());
         return
     }
 
@@ -74,10 +85,8 @@ async function renderNotes(){
             <h3>${note.title}</h3>
             <p class="note-content">${note.content}</p>
             <div class ="note-actions">
-            <button class="edit-btn" onclick="openNoteDialog('${note.id}')" title="Edit Note"> ✏️
-            </button>
-            <button class="delete-btn" onclick="deleteNote('${note.id}')" title="Delete Note"> ❌
-            </button>
+            <button class="edit-btn" data-id="${note.id}" title="Edit Note">✏️</button>
+            <button class="delete-btn" data-id="${note.id}" title="Delete Note">❌</button>
             </div>
         </div>
         `
@@ -93,7 +102,7 @@ async function openNoteDialog(noteId = null){
     if(noteId){
         // Edit note
 
-        const allNotes = await getAllNotes();
+        const allNotes = await getAllNotes(getAccountId());
 
         const noteToEdit = allNotes.find(note => String(note.id) === String(noteId));
         editingNoteId = noteId;
@@ -118,37 +127,67 @@ function closeNoteDialog(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-
     renderNotes();
+
+    document.getElementById('notesContainer').addEventListener('click', async (event) => {
+        const editBtn = event.target.closest('.edit-btn');
+        const deleteBtn = event.target.closest('.delete-btn');
+
+        if (editBtn) {
+            const noteId = editBtn.dataset.id;
+            await openNoteDialog(noteId);
+        }
+        if (deleteBtn) {
+            const noteId = deleteBtn.dataset.id;
+            await deleteNote(noteId, getAccountId());
+        }
+    });
+
+    document.getElementById('addNoteBtn').addEventListener('click', () => openNoteDialog());
+    document.getElementById('aiBtn').addEventListener('click', goToAIPage);
+    document.getElementById('notesBtn').addEventListener('click', goToNotesPage);
+    document.getElementById('closeBtn').addEventListener('click', closeNoteDialog);
+    document.getElementById('cancelBtn').addEventListener('click', closeNoteDialog);
 
     document.getElementById('noteForm').addEventListener('submit', saveNote);
 
     document.getElementById('noteDialog').addEventListener('click', function(event){
-        if(event.target === this){
-            closeNoteDialog();
-        }
-    })
-})
+        if(event.target === this) closeNoteDialog();
+    });
+});
 
 
 
-async function getAllNotes() {
+async function getAllNotes(accountId) {
 
-    const response = await fetch("/notes");
+    console.log("Sending accountId:", accountId);
 
-    const data = await response.json();
-
-    return data.notes;
-}
-
-async function sendInfo(title, content) {
-
-    const response = await fetch("/test", {
+    const response = await fetch("/notes", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            id: accountId
+        })
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+
+    return data.notes;
+}
+
+async function sendInfo(accountId, title, content) {
+
+    const response = await fetch("/new", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId,
             title: title,
             content: content
         })
@@ -160,7 +199,7 @@ async function sendInfo(title, content) {
 
 }
 
-async function updateNote(index, title, content) {
+async function updateNote(accountId, index, title, content) {
 
     const response = await fetch("/update", {
         method: "POST",
@@ -168,6 +207,7 @@ async function updateNote(index, title, content) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            id: accountId,
             index: index,
             title: title,
             content: content
@@ -178,7 +218,7 @@ async function updateNote(index, title, content) {
 }
 
 
-async function deleteNote(id) {
+async function deleteNote(noteId, accountId) {
 
     const confirmed = confirm(
         "Are you sure you want to delete this note?"
@@ -194,7 +234,8 @@ async function deleteNote(id) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: id
+            id: noteId,
+            accountId: accountId
         })
     });
 

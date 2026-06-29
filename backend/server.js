@@ -66,9 +66,11 @@ app.post('/message', async (req, res) => {
 });
 
 // This is connected with getInfo
-app.get("/notes", async (req, res) => {
+app.post("/notes", async (req, res) => {
 
-    const notes = await getAllNotes();
+    const accountId = req.body.id;
+
+    const notes = await getAllNotes(accountId);
 
     res.json({
         success: true,
@@ -77,12 +79,13 @@ app.get("/notes", async (req, res) => {
 });
 
 // This is connected with sendInfo function
-app.post("/test", async (req, res) => {
+app.post("/new", async (req, res) => {
 
     const title = req.body.title;
     const content = req.body.content;
+    const accountId = req.body.id;
 
-    const newId = await insertNote(title, content);
+    const newId = await insertNote(accountId, title, content);
     viewNoteTable();
 
     res.json({
@@ -93,11 +96,12 @@ app.post("/test", async (req, res) => {
 
 app.post("/update", async (req, res) => {
 
+    const accountId = req.body.id;
     const title = req.body.title;
     const content = req.body.content;
     const index = req.body.index;
 
-    editNote(index, title, content);
+    editNote(accountId, index, title, content);
 
     viewNoteTable();
 
@@ -110,8 +114,9 @@ app.post("/update", async (req, res) => {
 app.post("/delete", async (req, res) => {
 
     const deleteId = req.body.id;
+    const accountId = req.body.accountId;
 
-    await removeNote(deleteId);
+    await removeNote(deleteId, accountId);
 
     viewNoteTable();
 

@@ -14,7 +14,7 @@
      
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/login.css">
-    <script src= "js/login.js" defer ></script>
+    <script type="module" src="js/login.js"></script>
 </head>
 <body class="login-page">
     <div class = "wrapper">
@@ -52,7 +52,7 @@
                     </button>
                 </div>
                 <div class="switch-form">
-                <span>Don't have an account? <a href="#" onclick="registerFunction();">Register</a></span>
+                <span>Don't have an account? <a href="#" id="goToRegister">Register</a></span>
                 </div>
             </form>
 
@@ -87,7 +87,7 @@
                     </button>
                 </div>
                 <div class="switch-form">
-                <span>Already have an account? <a href="#" onclick="loginFunction();" >Login</a></span>
+                <span>Already have an account? <a href="#" id="goToLogin">Login</a></span>
                 </div>
             </form>
     </div>

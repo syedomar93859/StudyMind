@@ -1,3 +1,5 @@
+import {setUser, getAccountId, getUsername} from './session.js';
+
 const loginForm = document.querySelector(".login-form");
 const registerForm = document.querySelector(".register-form");
 const wrapper = document.querySelector(".wrapper");
@@ -6,9 +8,7 @@ const registerTitle = document.querySelector(".title-register");
 const signUpBtn = document.querySelector("#signUpBtn");
 const signInBtn = document.querySelector("#signInBtn");
 
-let username = null;
 
-let accountId = null;
 
 function loginFunction(){
 
@@ -73,12 +73,16 @@ document.getElementById("signInBtn").addEventListener("click", async function() 
         // alert("Your email is " + logEmail + " and your password is " + logPass);
         const account = await findAccount(logEmail, logPass);
 
-        username = account.username;
+        const accountId = account.id;
+        const username = account.username;
 
-        accountId = account.id;
-
-        console.log(username);
         console.log(accountId);
+        console.log(username);
+        
+        setUser(accountId, username);
+        console.log(sessionStorage.getItem("accountId"));
+
+        // setUser(account.id, account.username);
 
         if(account.truth){
           alert("Account exists!");
@@ -138,3 +142,6 @@ async function findAccount(email, password) {
 function goToHomePage() {
     location.href = './home.html'
 }
+
+document.getElementById("goToRegister").addEventListener("click", registerFunction);
+document.getElementById("goToLogin").addEventListener("click", loginFunction);

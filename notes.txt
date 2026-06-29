@@ -34,3 +34,5 @@ after clicking sign up on the registration page and the details enter are valid,
 make sure notes are tied to accounts
 passwords need to be encrypted
 multiple same accounts cant exist
+add a way to view the full note
+maybe add a way to make the password visible when typing it
