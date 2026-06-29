@@ -156,7 +156,9 @@ app.post("/check", async (req, res) => {
     viewAccountTable();
 
     res.json({
-        truth: found,
+        truth: found.exists,
+        username: found.username,
+        id: found.id,
         success: true
     });
 });

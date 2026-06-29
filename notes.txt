@@ -33,3 +33,4 @@ during registration prevent duplicate accounts
 after clicking sign up on the registration page and the details enter are valid, go back to the login page
 make sure notes are tied to accounts
 passwords need to be encrypted
+multiple same accounts cant exist

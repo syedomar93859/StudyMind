@@ -6,6 +6,10 @@ const registerTitle = document.querySelector(".title-register");
 const signUpBtn = document.querySelector("#signUpBtn");
 const signInBtn = document.querySelector("#signInBtn");
 
+let username = null;
+
+let accountId = null;
+
 function loginFunction(){
 
     // move the login form into the center
@@ -67,9 +71,16 @@ document.getElementById("signInBtn").addEventListener("click", async function() 
     const logPass = document.getElementById("log-pass").value;
     if (logEmail!= "" && logPass != "") {
         // alert("Your email is " + logEmail + " and your password is " + logPass);
-        const truth = await findAccount(logEmail, logPass);
+        const account = await findAccount(logEmail, logPass);
 
-        if(truth){
+        username = account.username;
+
+        accountId = account.id;
+
+        console.log(username);
+        console.log(accountId);
+
+        if(account.truth){
           alert("Account exists!");
           goToHomePage();
         }else{
@@ -94,7 +105,7 @@ async function createAccount(username, email, password) {
 
     const data = await response.json();
 
-    return data.id;
+    return data;
 
 }
 
@@ -113,7 +124,14 @@ async function findAccount(email, password) {
 
     const data = await response.json();
 
-    return data.truth;
+    // username = data.username;
+    // console.log(username);
+    
+    // accountId = data.id;
+    // console.log(accountId);
+
+
+    return data;
 
 }
 

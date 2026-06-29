@@ -143,18 +143,30 @@ export function viewAccountTable(){
 export function checkAccountExists(email, password) {
     return new Promise((resolve, reject) => {
 
-        const sql = `SELECT * FROM accounts WHERE email = ? AND encrypt_pass = ?`
-        
+        const sql = `SELECT * FROM accounts WHERE email = ? AND encrypt_pass = ?`;
+
         db.get(sql, [email, password], function(err, row) {
+
+            console.log(email);
+            console.log(password);
+            console.log(row);
 
             if (err) {
                 return reject(err);
             }
 
             if (row) {
-                resolve(true);
-            } else {
-                resolve(false);
+                resolve({
+                    exists: true,
+                    id: row.id,
+                    username: row.username
+                });
+            }else {
+                resolve({
+                    exists: false,
+                    id: null,
+                    username: null
+                });
             }
         });
     });
