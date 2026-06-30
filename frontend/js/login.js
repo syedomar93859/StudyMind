@@ -105,31 +105,45 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
   const regEmail = document.getElementById("reg-email").value;
   const regPass = document.getElementById("reg-pass").value;
   const agreed = document.getElementById("agree").checked;
-  
-  
 
+  // provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
+  let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-//   function showMessage() {
-//     console.log("The input lost focus.");
-// }
-
-
+  // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
+  const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
 
   const strongPassword = checkPassword(regPass);
+  let errors = [];
 
-  if (regName == "" && regEmail == "" && regPass == "" && !agreed){
-    alert("Please fill out the registration form.");
+  if (regName.trim() === "") {
+    errors.push("-Username is required.");
+  }else if(!nameRegex.test(regName)){
+    errors.push("-Username is invalid.");
+  }
+  
+  if (regEmail.trim() === "") {
+    errors.push("-Email is required.");
+  }else if(!emailRegex.test(regEmail)){
+    errors.push("-Email is invalid.");
+  }
+  
+  if (regPass === "") {
+    errors.push("-Password is required.");
+  }else if (!strongPassword.success) {
+    errors.push("-Password does not meet all requirements.");
+  }
 
-  }else if(regPass!= "" && !strongPassword.success){
-    // alert(strongPassword.length + strongPassword.number + strongPassword.letter + strongPassword.rarity);
-    alert("Password has not met all the requirements.");
-  }else if(!agreed){
-    alert("You have not agreed with the terms and conditions.");
+  if (!agreed) {
+    errors.push("-You must agree to the Terms & Conditions.");
   }
-  else if (regName != "" && regEmail != "" && regPass != "" && agreed && strongPassword.success) {
-    alert("Your username is " + regName + " and your email is " + regEmail + " and your password is " + regPass + " and you have checked the box");
-    const id = await createAccount(regName, regEmail, regPass);
+  
+  if (errors.length > 0) {
+    alert(errors.join("\n"));
+    return;
   }
+  
+  // everything passed
+  const id = await createAccount(regName, regEmail, regPass);
 
 });
 
