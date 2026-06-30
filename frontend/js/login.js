@@ -8,9 +8,43 @@ const registerTitle = document.querySelector(".title-register");
 const signUpBtn = document.querySelector("#signUpBtn");
 const signInBtn = document.querySelector("#signInBtn");
 
+async function showRequirementsMet() {
+    const regPass = document.getElementById("reg-pass").value;
 
+//   document.getElementById("fname").addEventListener("change", myFunction);
+
+
+  const strongPassword = checkPassword(regPass);
+
+  if (regPass == ""){
+    document.getElementById("req-title").textContent = "";
+    document.getElementById("length-req").textContent = "";
+    document.getElementById("number-req").textContent = "";
+    document.getElementById("letter-req").textContent = "";
+    document.getElementById("rarity-req").textContent = "";
+
+  }else if(regPass!= ""){
+    document.getElementById("req-title").textContent = "Password Requirements";
+    document.getElementById("length-req").innerHTML = strongPassword.length;  
+    document.getElementById("number-req").innerHTML = strongPassword.number;
+    document.getElementById("letter-req").innerHTML = strongPassword.letter;
+    document.getElementById("rarity-req").innerHTML = strongPassword.rarity;
+    // alert(strongPassword.length + strongPassword.number + strongPassword.letter + strongPassword.rarity);
+  }
+
+    resizeWrapper(registerForm);
+}
+
+
+// document.getElementById("requirements-met").innerHTML = "New text!";
+
+
+document.getElementById("reg-pass").addEventListener("input", showRequirementsMet);
+
+// document.getElementById("password").addEventListener("input", someFunction);
 
 function loginFunction(){
+    clearPasswordRequirements();
 
     // move the login form into the center
     loginForm.style.left = "50%";
@@ -21,7 +55,7 @@ function loginFunction(){
     registerForm.style.opacity = 0;
 
     // resize the wrapper to fit the login form
-    wrapper.style.height = "500px";
+    // wrapper.style.height = "500px";
 
     // show the Login title
     loginTitle.style.top = "50%";
@@ -30,6 +64,16 @@ function loginFunction(){
     // hide the Register title
     registerTitle.style.top = "50px";
     registerTitle.style.opacity = 0;
+
+    resizeWrapper(loginForm);
+}
+function clearPasswordRequirements() {
+    document.getElementById("reg-pass").value = "";
+    document.getElementById("req-title").textContent = "";
+    document.getElementById("length-req").textContent = "";
+    document.getElementById("number-req").textContent = "";
+    document.getElementById("letter-req").textContent = "";
+    document.getElementById("rarity-req").textContent = "";
 }
 
 function registerFunction(){
@@ -43,7 +87,7 @@ function registerFunction(){
     registerForm.style.opacity = 1;
 
     // increase the wrapper height for the larger register form
-    wrapper.style.height = "580px";
+    // wrapper.style.height = "580px";
 
     // hide the Login title
     loginTitle.style.top = "-60px";
@@ -52,6 +96,8 @@ function registerFunction(){
     // show the Register title
     registerTitle.style.top = "50%";
     registerTitle.style.opacity = 1;
+
+    resizeWrapper(registerForm);
 }
 
 document.getElementById("signUpBtn").addEventListener("click", async function() {
@@ -59,39 +105,122 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
   const regEmail = document.getElementById("reg-email").value;
   const regPass = document.getElementById("reg-pass").value;
   const agreed = document.getElementById("agree").checked;
+  
+  
 
-  if (regName != "" && regEmail != "" && regPass != "" && agreed) {
+
+//   function showMessage() {
+//     console.log("The input lost focus.");
+// }
+
+
+
+  const strongPassword = checkPassword(regPass);
+
+  if (regName == "" && regEmail == "" && regPass == "" && !agreed){
+    alert("Please fill out the registration form.");
+
+  }else if(regPass!= "" && !strongPassword.success){
+    // alert(strongPassword.length + strongPassword.number + strongPassword.letter + strongPassword.rarity);
+    alert("Password has not met all the requirements.");
+  }else if(!agreed){
+    alert("You have not agreed with the terms and conditions.");
+  }
+  else if (regName != "" && regEmail != "" && regPass != "" && agreed && strongPassword.success) {
     alert("Your username is " + regName + " and your email is " + regEmail + " and your password is " + regPass + " and you have checked the box");
     const id = await createAccount(regName, regEmail, regPass);
   }
+
 });
 
-document.getElementById("signInBtn").addEventListener("click", async function() {
+loginForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
     const logEmail = document.getElementById("log-email").value;
     const logPass = document.getElementById("log-pass").value;
-    if (logEmail!= "" && logPass != "") {
-        // alert("Your email is " + logEmail + " and your password is " + logPass);
-        const account = await findAccount(logEmail, logPass);
 
-        const accountId = account.id;
-        const username = account.username;
+    const account = await findAccount(logEmail, logPass);
 
-        console.log(accountId);
-        console.log(username);
-        
-        setUser(accountId, username);
-        console.log(sessionStorage.getItem("accountId"));
+    if(account.truth){
 
-        // setUser(account.id, account.username);
+        setUser(account.id, account.username);
 
-        if(account.truth){
-          alert("Account exists!");
-          goToHomePage();
-        }else{
-          alert("Account does not exist!")
-        }
-}
+        alert("Account exists!");
+
+        goToHomePage();
+
+    }else{
+
+        alert("Account does not exist!");
+
+    }
 });
+
+function checkPassword(password){
+
+    // password.value.charCodeAt(0);
+
+
+    let long = true;
+    let lengthMessage = "✅ Has at least 8 characters\n";
+
+    if (password.length < 8){
+        long = false;
+        lengthMessage = "❌ Less than 8 characters\n";
+        
+    }
+    // else if (){
+
+    // }
+
+    let hasLetter = false;
+    let letterMessage = "❌ Has no letters\n";
+
+    let hasNumber = false;
+    let numberMessage = "❌ Has no numbers\n";;
+
+    for (let i = 0; i < password.length; i++){
+        const code = password.charCodeAt(i);
+        
+        if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+            hasLetter = true;
+            letterMessage = "✅ Has at least one letter\n";
+        }
+        
+        if (code >= 48 && code <= 57) {
+            hasNumber = true;
+            numberMessage = "✅ Has at least one number\n";
+        }
+
+        if (hasLetter && hasNumber) {
+            break;
+        }
+    }
+
+
+    const weakPassword = ["password", "Password", "password1", "password123", "12345678", "123456789", "1234567890", "87654321", 
+        "11111111", "00000000", "123123123", "qwerty12", "qwerty123", "qwertyui", "qwertyuiop", "asdfghjk", "zxcvbnm1", "abc12345",
+        "welcome", "letmein", "football", "baseball", "superman", "dragon12", "monkey12", "sunshine", "princess", "computer", "internet", 
+        "whatever", "trustno1", "master12", "freedom1", "iloveyou", "loveyou1", "charlie1", "password!", "admin123",
+        "administrator", "guest123", "login123"];
+
+    const isWeak = weakPassword.includes(password);
+
+    let rarityMessage = "✅ Not a commonly used password\n";
+
+    if (isWeak){
+        rarityMessage = "❌ Is a common password\n";
+    }
+
+    return {
+        length: lengthMessage,
+        number: numberMessage,
+        letter: letterMessage,
+        rarity: rarityMessage,
+        success: long && hasLetter && hasNumber && !isWeak,
+    };
+
+}
 
 async function createAccount(username, email, password) {
 
@@ -137,6 +266,10 @@ async function findAccount(email, password) {
 
     return data;
 
+}
+
+function resizeWrapper(form) {
+    wrapper.style.height = form.scrollHeight + 120 + "px";
 }
 
 function goToHomePage() {

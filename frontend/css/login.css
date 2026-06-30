@@ -30,10 +30,11 @@ a:hover{
 }
 
 .login-page{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px 0;
 }
 
 .wrapper{
@@ -53,6 +54,9 @@ a:hover{
 
   /* hides the form while it slides outside the box */
   overflow: hidden;
+
+  min-height: 500px;
+  height: auto;
 }
 
 .form-header{
@@ -208,6 +212,12 @@ a:hover{
     display: flex;
     align-items: center;
     gap: 6px;
+    color: #FFF;
+}
+
+.password-req-display{
+  color: #FFF;
+  margin-bottom: 10px;
 }
 
 

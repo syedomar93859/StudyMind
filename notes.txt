@@ -23,9 +23,9 @@ this is for converting from markdown to html:
 npm install marked
 
 Implement these later:
-Ask the user after they have decided to click the delete button
+Kinda Done: Ask the user after they have decided to click the delete button for a note
 Login system
-Make sure note titles are fully visible
+Done: Make sure note titles are fully visible
 Add settings to log out
 Check if password is strong
 Tell the user that the checkbox has not been checked
@@ -36,3 +36,6 @@ passwords need to be encrypted
 multiple same accounts cant exist
 add a way to view the full note
 maybe add a way to make the password visible when typing it
+maybe a color indicator to show that the password is strong or not(red means weak and green means strong)
+add terms and conditions
+when changing from register form to login form to register form, maybe the username and email should be cleared
