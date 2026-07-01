@@ -44,7 +44,7 @@ document.getElementById("reg-pass").addEventListener("input", showRequirementsMe
 // document.getElementById("password").addEventListener("input", someFunction);
 
 function loginFunction(){
-    clearPasswordRequirements();
+    clearRegisterForm();
 
     // move the login form into the center
     loginForm.style.left = "50%";
@@ -100,6 +100,59 @@ function registerFunction(){
     resizeWrapper(registerForm);
 }
 
+
+
+
+async function checkUsernameExists(username) {
+
+    const response = await fetch("/name", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: username
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
+}
+
+async function checkEmailExists(email) {
+
+    const response = await fetch("/email", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
+}
+
+
+// function checkEmailExists(){
+    
+// }
+
+function clearRegisterForm() {
+    document.getElementById("reg-name").value = "";
+    document.getElementById("reg-email").value = "";
+    document.getElementById("reg-pass").value = "";
+    document.getElementById("agree").checked = false;
+
+    clearPasswordRequirements();
+}
+
 document.getElementById("signUpBtn").addEventListener("click", async function() {
   const regName = document.getElementById("reg-name").value;
   const regEmail = document.getElementById("reg-email").value;
@@ -112,17 +165,26 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
   // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
   const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
 
+  const usernameExists = await checkUsernameExists(regName.trim());
+
+  const emailExists = await checkEmailExists(regEmail.trim());
+
   const strongPassword = checkPassword(regPass);
+
   let errors = [];
 
   if (regName.trim() === "") {
     errors.push("-Username is required.");
+  }else if(usernameExists){
+    errors.push("-Username has already been picked.");
   }else if(!nameRegex.test(regName)){
     errors.push("-Username is invalid.");
   }
   
   if (regEmail.trim() === "") {
     errors.push("-Email is required.");
+  }else if(emailExists){
+    errors.push("-This email already has an account.");
   }else if(!emailRegex.test(regEmail)){
     errors.push("-Email is invalid.");
   }
@@ -141,9 +203,26 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
     alert(errors.join("\n"));
     return;
   }
+    
   
-  // everything passed
-  const id = await createAccount(regName, regEmail, regPass);
+
+  try {
+   const data = await createAccount(regName, regEmail, regPass);
+
+    if (!data.success) {
+        alert(data.message);
+        return;
+    }
+
+    alert("Account successfully created. You can log in with this account.")
+    loginFunction(); 
+
+    }
+    catch (err) {
+        alert("Unable to contact the server.");
+    }
+
+  
 
 });
 

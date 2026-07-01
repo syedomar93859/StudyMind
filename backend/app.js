@@ -170,6 +170,52 @@ export function checkAccountExists(email, password) {
     });
 }
 
+export function doesNameExist(name) {
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT 1 FROM accounts WHERE username = ? LIMIT 1",
+            [name],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                if (row) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }
+        );
+    });
+}
+
+export function doesEmailExist(email) {
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT 1 FROM accounts WHERE email = ? LIMIT 1",
+            [email],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                if (row) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            }
+        );
+    });
+}
+
 
 
 // // Create table
