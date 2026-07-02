@@ -166,19 +166,30 @@ app.listen(port, () => {
 
 // this is connecting with createAccount
 app.post("/register", async (req, res) => {
+    try {
+        const username = req.body.name;
+        const email = req.body.email;
+        const password = req.body.pass;
 
-    const username = req.body.name;
-    const email = req.body.email;
-    const password = req.body.pass;
+        const securePass = await encryptPassword(password);
 
-    const securePass = await encryptPassword(password);
-    const accountId = await insertAccount(username, email, securePass);
-    viewAccountTable();
+        const accountId = await insertAccount(username, email, securePass);
 
-    res.json({
-        id: accountId,
-        success: true
-    });
+        res.json({
+            success: true,
+            id: accountId
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
 });
 
 // this is connecting with createAccount

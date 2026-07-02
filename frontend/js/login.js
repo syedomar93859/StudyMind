@@ -24,7 +24,7 @@ async function showRequirementsMet() {
     document.getElementById("rarity-req").textContent = "";
 
   }else if(regPass!= ""){
-    document.getElementById("req-title").textContent = "Password Requirements";
+    document.getElementById("req-title").textContent = "Password Requirements:";
     document.getElementById("length-req").innerHTML = strongPassword.length;  
     document.getElementById("number-req").innerHTML = strongPassword.number;
     document.getElementById("letter-req").innerHTML = strongPassword.letter;
@@ -222,9 +222,9 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
 
     }
     catch (err) {
-        alert("Unable to contact the server.");
+        console.error(err);
+        alert(err.message);
     }
-
   
 
 });
@@ -241,13 +241,13 @@ loginForm.addEventListener("submit", async function(event) {
 
         setUser(account.id, account.username);
 
-        alert("Account exists!");
+        alert("Account exists.");
 
         goToHomePage();
 
     }else{
 
-        alert("Account does not exist!");
+        alert("Email or password is invalid.");
 
     }
 });
