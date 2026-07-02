@@ -30,3 +30,4 @@ add a way to view the full note
 maybe add a way to make the password visible when typing it
 maybe a color indicator to show that the password is strong or not(red means weak and green means strong)
 add terms and conditions
+display username in the navigation bar

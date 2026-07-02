@@ -203,6 +203,9 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
     alert(errors.join("\n"));
     return;
   }
+
+//   const securePass = await encryptPassword(regPass);
+
     
   
 
@@ -350,16 +353,31 @@ async function findAccount(email, password) {
 
     const data = await response.json();
 
-    // username = data.username;
-    // console.log(username);
-    
-    // accountId = data.id;
-    // console.log(accountId);
-
-
     return data;
 
 }
+
+// async function encryptPassword(password) {
+
+//     const response = await fetch("/hashing", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({
+//             pass: password
+//         })
+//     });
+
+//     const data = await response.json();
+
+
+
+
+//     return data.hash;
+
+// }
+
 
 function resizeWrapper(form) {
     wrapper.style.height = form.scrollHeight + 120 + "px";

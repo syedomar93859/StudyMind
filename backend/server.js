@@ -6,7 +6,9 @@ import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
 import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote, 
-    insertAccount, viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist } from './app.js';
+    insertAccount, viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist,  } from './app.js';
+
+import { encryptPassword, verifyPassword  } from './password.js';
 
 
 
@@ -99,7 +101,7 @@ app.post("/name", async (req, res) => {
     const username = req.body.name;
 
     const exist = await doesNameExist(username);
-    viewNoteTable();
+    viewAccountTable();
 
     res.json({
         truth: exist,
@@ -169,7 +171,8 @@ app.post("/register", async (req, res) => {
     const email = req.body.email;
     const password = req.body.pass;
 
-    const accountId = await insertAccount(username, email, password);
+    const securePass = await encryptPassword(password);
+    const accountId = await insertAccount(username, email, securePass);
     viewAccountTable();
 
     res.json({
@@ -182,15 +185,38 @@ app.post("/register", async (req, res) => {
 app.post("/check", async (req, res) => {
 
     const email = req.body.email;
-    const password = req.body.pass;
+    const pass = req.body.pass;
 
-    const found = await checkAccountExists(email, password);
+
+
+    const found = await checkAccountExists(email);
+    
+    if (!found.exists) {
+        return res.json({
+            truth: false
+        });
+    }
+    
+    const same = await verifyPassword(pass, found.password);
+
     viewAccountTable();
 
     res.json({
-        truth: found.exists,
+        truth: same,
         username: found.username,
         id: found.id,
         success: true
     });
 });
+
+// app.post('/hashing', async (req, res) => {
+
+//     const password = req.body.pass;
+
+//     const securePass = await encryptPassword(password);
+
+//     res.json({
+//         hash: securePass 
+//     })
+
+// });

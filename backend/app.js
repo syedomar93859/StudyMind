@@ -138,16 +138,15 @@ export function viewAccountTable(){
     });
 }
 
-export function checkAccountExists(email, password) {
+export function checkAccountExists(email) {
     return new Promise((resolve, reject) => {
 
-        const sql = `SELECT * FROM accounts WHERE email = ? AND encrypt_pass = ?`;
+        const sql = `SELECT * FROM accounts WHERE email = ?`;
 
-        db.get(sql, [email, password], function(err, row) {
+        db.get(sql, [email], function(err, row) {
 
             console.log(email);
-            console.log(password);
-            console.log(row);
+            // console.log(row);
 
             if (err) {
                 return reject(err);
@@ -157,13 +156,15 @@ export function checkAccountExists(email, password) {
                 resolve({
                     exists: true,
                     id: row.id,
-                    username: row.username
+                    username: row.username,
+                    password: row.encrypt_pass
                 });
             }else {
                 resolve({
                     exists: false,
                     id: null,
-                    username: null
+                    username: null,
+                    password: null
                 });
             }
         });
