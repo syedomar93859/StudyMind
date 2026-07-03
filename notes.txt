@@ -25,9 +25,7 @@ npm install marked
 Implement these later:
 Login system
 Add settings to log out
-passwords need to be encrypted
 add a way to view the full note
-maybe add a way to make the password visible when typing it
 maybe a color indicator to show that the password is strong or not(red means weak and green means strong)
 add terms and conditions
-display username in the navigation bar
+so I just added a way to hide and show the password in the register form, but also do it for login form

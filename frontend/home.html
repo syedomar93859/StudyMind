@@ -12,37 +12,38 @@
      
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/home.css">
-    <script src= "js/home.js" defer ></script>
+    <script type="module" src="js/home.js"></script>
 </head>
 <body>
     <div class="navigation">
         <p>
             <span id="clickable-text">StudyMind</span>
         </p>
-        <!-- <p onclick="goToHomePage();">StudyMind</p> -->
-        <!-- <a href="home.html">StudyMind</a> -->
 
-        <div class="nav-buttons">
-            <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
-                Ask AI
-            </button>
+        <div class="nav-right">
+            <span id="account-name"></span>
 
-            <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
-                Notes
-            </button>
+            <div class="nav-buttons">
+                <button class="main-button" id="go-to-ai-button">
+                    Ask AI
+                </button>
+
+                <button class="main-button" id="go-to-notes-button">
+                    Notes
+                </button>
+            </div>
         </div>
-
     </div>
 
     <div class="home-details">
         <h1 class="title">StudyMind</h1>
         <p class="subtitle">AI-powered studying and note management</p>
         
-        <button class="front-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
+        <button class="front-button" id="home-ai-button">
                 Ask AI
         </button>
 
-        <button class="front-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
+        <button class="front-button" id="home-notes-button">
                 Notes
         </button>
 

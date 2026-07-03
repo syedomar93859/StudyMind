@@ -3,14 +3,6 @@ import fs from "fs";
 
 
 
-export function add(a, b) {
-    return a + b;
-}
-
-export function subtract(a, b) {
-    return a - b;
-}
-
 export function insertNote(accountId, title, content) {
     return new Promise((resolve, reject) => {
 
@@ -29,7 +21,7 @@ export function insertNote(accountId, title, content) {
 }
 
 export function viewNoteTable(){
-    // Query data AFTER insert finishes
+    // query data after insert finishes
     const sql = `SELECT * FROM notes`;
 
     db.all(sql, [], (err, rows) => {
@@ -92,7 +84,7 @@ export function editNote(accountId, noteId, title, content) {
     });
 }
 
-// Connect to database
+// connect to database
 const db = new sqlite3.Database(
     './studymind.db',
     sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
@@ -126,7 +118,7 @@ export function insertAccount(username, email, password) {
 
 
 export function viewAccountTable(){
-    // Query data AFTER insert finishes
+    // query data after insert finishes
     const sql = `SELECT * FROM accounts`;
 
     db.all(sql, [], (err, rows) => {

@@ -14,7 +14,7 @@
      
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/ai.css">
-    <script src= "js/ai.js" defer ></script>
+    <script type="module" src="js/ai.js"></script>
 </head>
 
 <body style="text-align:center;">
@@ -23,16 +23,19 @@
             <span id="clickable-text">StudyMind</span>
         </p>
 
-        <div class="nav-buttons">
-            <button class="main-button" id="go-to-ai-button" type="button" onclick="goToAIPage();">
-                Ask AI
-            </button>
+        <div class="nav-right">
+            <span id="account-name"></span>
 
-            <button class="main-button" id="go-to-notes-button" type="button" onclick="goToNotesPage();">
-                Notes
-            </button>
+            <div class="nav-buttons">
+                <button class="main-button" id="go-to-ai-button">
+                    Ask AI
+                </button>
+
+                <button class="main-button" id="go-to-notes-button">
+                    Notes
+                </button>
+            </div>
         </div>
-
     </div>
 
     <!-- <button type="button" onclick="goToHomePage();">Home</button> -->

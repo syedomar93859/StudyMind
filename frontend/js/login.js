@@ -1,4 +1,4 @@
-import {setUser, getAccountId, getUsername} from './session.js';
+import {setUser} from './session.js';
 
 const loginForm = document.querySelector(".login-form");
 const registerForm = document.querySelector(".register-form");
@@ -7,6 +7,10 @@ const loginTitle = document.querySelector(".title-login");
 const registerTitle = document.querySelector(".title-register");
 const signUpBtn = document.querySelector("#signUpBtn");
 const signInBtn = document.querySelector("#signInBtn");
+
+const password = document.getElementById("reg-pass");
+const viewButton = document.getElementById("viewPass");
+const icon = viewButton.querySelector("i");
 
 async function showRequirementsMet() {
     const regPass = document.getElementById("reg-pass").value;
@@ -45,6 +49,12 @@ document.getElementById("reg-pass").addEventListener("input", showRequirementsMe
 
 function loginFunction(){
     clearRegisterForm();
+
+    password.type = "password";
+    if (icon.classList.contains("bx-hide")) {
+        icon.classList.replace("bx-hide", "bx-show");
+        viewButton.title = "Show password";
+    }
 
     // move the login form into the center
     loginForm.style.left = "50%";
@@ -218,6 +228,7 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
     }
 
     alert("Account successfully created. You can log in with this account.")
+    
     loginFunction(); 
 
     }
@@ -228,6 +239,9 @@ document.getElementById("signUpBtn").addEventListener("click", async function() 
   
 
 });
+
+
+
 
 loginForm.addEventListener("submit", async function(event) {
     event.preventDefault();
@@ -377,6 +391,20 @@ async function findAccount(email, password) {
 //     return data.hash;
 
 // }
+
+
+
+viewButton.addEventListener("click", () => {
+    if (password.type === "password") {
+        password.type = "text";
+        icon.classList.replace("bx-show", "bx-hide");
+        viewButton.title = "Hide password";
+    } else {
+        password.type = "password";
+        icon.classList.replace("bx-hide", "bx-show");
+        viewButton.title = "Show password";
+    }
+});
 
 
 function resizeWrapper(form) {

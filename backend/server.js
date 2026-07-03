@@ -5,8 +5,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
-import { add, insertNote, viewNoteTable, deleteNoteTable,editNote, getAllNotes, removeNote, 
-    insertAccount, viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist,  } from './app.js';
+import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
+    viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist,  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 

@@ -139,10 +139,42 @@ a:hover{
 }
 
 .input-box{
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+
+.uncover{
+  transition: 0.2s;
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+.uncover i{
+    font-size: 20px;
+    color: white;
+}
+
+.uncover:hover i{
+    color: #d0d0d0;
+    background: rgba(255,255,255,0.08);
 }
 
 .input-field{

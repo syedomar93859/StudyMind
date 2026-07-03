@@ -1,4 +1,9 @@
-import {setUser, getAccountId, getUsername} from './session.js';
+import {getAccountId, getUsername} from './session.js';
+
+document.getElementById("account-name").innerHTML = getUsername();
+
+document.getElementById("go-to-ai-button")
+    .addEventListener("click", goToAIPage);
 
 function goToAIPage() {
     location.href = './ask-ai.html'
@@ -9,10 +14,13 @@ function goToAIPage() {
 //     location.href = './index.html'
 // }
 
+document.getElementById("go-to-notes-button")
+    .addEventListener("click", goToNotesPage);
 
 function goToNotesPage() {
     location.href = './notes.html'
 }
+
 // navigates to the Notes page
 
 const textLink = document.getElementById("clickable-text");

@@ -26,6 +26,18 @@ body{
     padding: 10px 20px;
 }
 
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#account-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+}
+
 .nav-buttons {
     display: flex;
     gap: 10px;
