@@ -23,9 +23,7 @@ this is for converting from markdown to html:
 npm install marked
 
 Implement these later:
-Login system
 Add settings to log out
 add a way to view the full note
 maybe a color indicator to show that the password is strong or not(red means weak and green means strong)
-add terms and conditions
-so I just added a way to hide and show the password in the register form, but also do it for login form
+

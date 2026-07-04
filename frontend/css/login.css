@@ -292,6 +292,88 @@ a:hover{
 .switch-form a:hover{
     color: #d0d0d0;
 }
+
+
+/* modal is hidden by default */
+.modal-overlay{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+
+    z-index:9999;
+}
+
+/* Show the modal */
+.modal-overlay.show {
+  display: block;
+}
+
+/* The modal box */
+.modal-box {
+  background: #1b2234;
+  width: 90%;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  color: white;
+}
+
+.modal-box h2 {
+    margin-bottom: 20px;
+}
+
+.modal-box p {
+    margin-bottom: 15px;
+}
+
+.modal-box ul {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.modal-box li {
+    margin-bottom: 10px;
+}
+
+
+/* Close button */
+.modal-close {
+  position: absolute;
+  right: 12px;
+  top: 8px;
+  font-size: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+
+/* this makes the modal appear */
+.show {
+    display: block;
+}
+
+#openBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#openBtn i {
+    font-size: 20px;
+    color: white;
+}
+
+#closeBtn{
+  color: white;
+}
+
 @media only screen and (max-width: 564px){
     .wrapper{
         margin: 20px;

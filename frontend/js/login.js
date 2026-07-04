@@ -12,6 +12,10 @@ const password = document.getElementById("reg-pass");
 const viewButton = document.getElementById("viewPass");
 const icon = viewButton.querySelector("i");
 
+const otherPassword = document.getElementById("log-pass");
+const seeButton = document.getElementById("seePass");
+const otherIcon = seeButton.querySelector("i");
+
 async function showRequirementsMet() {
     const regPass = document.getElementById("reg-pass").value;
 
@@ -91,6 +95,14 @@ function registerFunction(){
     // slide the login form off-screen to the left
     loginForm.style.left = "-50%";
     loginForm.style.opacity = 0;
+
+    document.getElementById("log-pass").value = "";
+
+    otherPassword.type = "password";
+    if (otherIcon.classList.contains("bx-hide")) {
+        otherIcon.classList.replace("bx-hide", "bx-show");
+        seeButton.title = "Show password";
+    }
 
     // move the register form into the center
     registerForm.style.left = "50%";
@@ -392,6 +404,17 @@ async function findAccount(email, password) {
 
 // }
 
+seeButton.addEventListener("click", () => {
+    if (otherPassword.type === "password") {
+        otherPassword.type = "text";
+        otherIcon.classList.replace("bx-show", "bx-hide");
+        seeButton.title = "Hide password";
+    } else {
+        otherPassword.type = "password";
+        otherIcon.classList.replace("bx-hide", "bx-show");
+        seeButton.title = "Show password";
+    }
+});
 
 
 viewButton.addEventListener("click", () => {
@@ -417,3 +440,31 @@ function goToHomePage() {
 
 document.getElementById("goToRegister").addEventListener("click", registerFunction);
 document.getElementById("goToLogin").addEventListener("click", loginFunction);
+
+const modal = document.getElementById("modal");
+
+document.getElementById("openBtn").addEventListener("click", () => {
+    modal.classList.add("show");
+});
+
+document.getElementById("closeBtn").addEventListener("click", () => {
+    modal.classList.remove("show");
+});
+
+/* close when clicking outside the modal box */
+modal.addEventListener("click", function (event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+
+/* close when pressing Escape */
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+});
+
+function closeModal() {
+  modal.classList.remove("show");
+}

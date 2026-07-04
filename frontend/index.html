@@ -36,11 +36,18 @@
                     <label for="log-email" class="label">Email</label>
                     <i class="bx bx-envelope icon"></i>
                 </div>
+
+
                 <div class = "input-box">
                     <input type="password" class="input-field" id="log-pass" required>
                     <label for="log-pass" class="label">Password</label>
-                    <i class="bx bx-lock-alt icon"></i>
+                    <button type="button" class="uncover" id="seePass" title="Show password"> 
+                        <i class="bx bx-show"></i>
+                    </button>
                 </div>
+            
+
+
                 <div class="form-cols">
                     <div class="col-1"></div>
                     <div class="col-2">
@@ -89,6 +96,13 @@
                     <div class="col-1">
                         <input type="checkbox" id="agree">
                         <label for="agree"> I agree to terms & conditions</label>
+
+                        <button type="button" id="openBtn">
+                           <i class="bx bx-info-circle"></i>
+                        </button>
+                        
+                
+
                     </div>
 
                     <div class="col-2">
@@ -102,6 +116,25 @@
                 <span>Already have an account? <a href="#" id="goToLogin">Login</a></span>
                 </div>
             </form>
+
+            <div id="modal" class="modal-overlay">
+                            <div class="modal-box">
+
+                                <h2>Terms & Conditions<br></h2>
+                                <p>By creating an account, you agree that:</p>
+                                
+                                <ul>
+                                    <li>This application is a portfolio and educational project.</li>
+                                    <li>Do not use sensitive or real passwords.</li>
+                                    <li>Information entered may be stored for demonstration purposes.</li>
+                                    <li>Registered accounts may be reset or deleted without notice.</li>
+                                    <li>Thank you for trying out this project.</li>
+                                </ul>
+                                <button id="closeBtn" class="modal-close">x</button>
+
+                                
+                            </div>
+                        </div>
     </div>
 </body>
 </html>
