@@ -22,6 +22,12 @@ html {
     scrollbar-color: #555 #121212;
 }
 
+body{
+  font-family: "Inter", system-ui, sans-serif;
+  background-color: #121212; /* this sets the background color of the whole page */
+  color: #f3f4f6;            /* this sets he text to a a nice white */
+}
+
 .main-button {
     padding: 10px 20px;
     width: 120px;
@@ -84,6 +90,7 @@ html {
   opacity: 0.8;             
 }
 
+
 .settings {
     width: 40px;
     height: 40px;
@@ -103,72 +110,66 @@ html {
     transition: color 0.2s ease;
 }
 
+.settings-container{
+    display:flex;
+    align-items:flex-start;
+    gap:40px;
+
+    margin:30px;
+    margin-top: 20px;
+}
+
 .settings:hover i {
     color: lightgray;   
 }
 
-#submission {
-    width: 400px;
-    height: 100px;
+/* The sidebar menu */
+.sidenav{
+    width:200px;
+    flex-shrink:0;
+
+    background:#171717;
+    border-radius:10px;
+    padding:20px 0;
 }
 
-body{
-  font-family: "Inter", system-ui, sans-serif;
-  background-color: #121212; /* this sets the background color of the whole page */
-  color: #f3f4f6;            /* this sets he text to a a nice white */
-}
 
 
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 150px;
-  background-color: #555;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  font-size: 10px;
-  top: 50%;
-  left: 100%;
-  margin-left: 10px;
-  transform: translateY(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.tooltip .tooltiptext::after {
-  content: "";
-  position: absolute;       
-  top: 50%;                 
-  right: 100%;              
-  margin-top: -5px;         
-  
-  /* points triangle to the left */
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent #555 transparent transparent; 
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.response {
-  background-color: #1b2234;
-  color: #f3f4f6;
+/* The navigation menu links */
+.sidenav a {
+  padding: 14px 20px;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  display: block;
   border-radius: 8px;
-  padding: 20px;
-  max-width: 1000px;
-  margin: 20px auto;
-  
-  /* this aligns the response text to the left */
-  text-align: left; 
+  transition: 0.2s;
+}
+
+.sidenav a.active{
+
+    background:#265B6A;
+
+    font-weight:600;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: lightgray;
+    background:#265B6A;
+}
+
+/* Style page content */
+.main{
+    flex:1;
+
+    background:#1b2234;
+    border-radius:8px;
+    padding:25px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }

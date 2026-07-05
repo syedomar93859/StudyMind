@@ -4,6 +4,31 @@ body{
   color: #f3f4f6;            /* this sets he text to a a nice white */
 }
 
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #555 #121212;
+}
+
+
 .main-button {
     padding: 10px 20px;
     width: 120px;
@@ -30,6 +55,29 @@ body{
     display: flex;
     align-items: center;
     gap: 20px;
+}
+
+.settings {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: transparent;
+    border: none;
+    color: white;   /* default icon color */
+    cursor: pointer;
+}
+
+.settings i {
+    font-size: 24px;
+    transition: color 0.2s ease;
+}
+
+.settings:hover i {
+    color: lightgray;   
 }
 
 #account-name {

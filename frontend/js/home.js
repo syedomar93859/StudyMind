@@ -25,6 +25,13 @@ function goToNotesPage() {
 // navigates to the Notes page
 
 
+document.getElementById("go-to-settings-button")
+    .addEventListener("click", goToSettingsPage);
+
+function goToSettingsPage(){
+    location.href = './settings.html'
+}
+
 
 
 document.getElementById("home-ai-button")

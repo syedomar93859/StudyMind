@@ -23,6 +23,18 @@ function goToNotesPage() {
 
 // navigates to the Notes page
 
+
+
+document.getElementById("go-to-settings-button")
+    .addEventListener("click", goToSettingsPage);
+
+function goToSettingsPage(){
+    location.href = './settings.html'
+}
+
+
+
+
 // 1. Get the submit button safely
 const button = document.getElementById('submit');
 

@@ -23,6 +23,16 @@ function goToNotesPage() {
 
 // navigates to the Notes page
 
+
+document.getElementById("go-to-settings-button")
+    .addEventListener("click", goToSettingsPage);
+
+function goToSettingsPage(){
+    location.href = './settings.html'
+}
+
+
+
 const textLink = document.getElementById("clickable-text");
 
 if (textLink) {
