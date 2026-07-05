@@ -6,7 +6,8 @@ import { fileURLToPath } from 'url';
 
 // This executes the code in app.js
 import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
-    viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist,  } from './app.js';
+    viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist, getHistory,
+updateHistory, deleteHistory  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 
@@ -45,25 +46,25 @@ app.post('/message', async (req, res) => {
     const userQuestion = req.body.question;
     // Gets the question sent from the frontend
 
-    const aiResponse = await run(userQuestion);
-    // Sends the question to Gemini and waits for the AI response
+    const history = req.body.history;
 
-    const finalMessage = marked.parse(aiResponse);
-    // converting markdown into html
+    const accountId = req.body.id;
 
-    // console.log(userQuestion);
-    // Prints the user's question in the terminal
+    const result = await run(userQuestion, history);
+    
+    const finalMessage = marked.parse(result.aiResponse);
 
-    // console.log(aiResponse);
-    // Prints the AI response in the terminal
+    if (!result.aiResponse.startsWith("Error:")) {
+        await updateHistory(accountId, "user", result.userQuestion);
+        await updateHistory(accountId, "model", result.aiResponse);
+    }
+    
 
-    // console.log(finalMessage);
-    // prints the converted response
+    await deleteHistory(accountId);
 
     res.json({
-        message: finalMessage 
-    })
-    // Sends the AI response back to the frontend as JSON
+        message: finalMessage
+    });
 
 });
 
@@ -220,14 +221,14 @@ app.post("/check", async (req, res) => {
     });
 });
 
-// app.post('/hashing', async (req, res) => {
+app.post("/history", async (req, res) => {
 
-//     const password = req.body.pass;
+    const accountId = req.body.account_id;
 
-//     const securePass = await encryptPassword(password);
+    const details = await getHistory(accountId);
 
-//     res.json({
-//         hash: securePass 
-//     })
-
-// });
+    res.json({
+        history: details,
+        success: true
+    });
+});

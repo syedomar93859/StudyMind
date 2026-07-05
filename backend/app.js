@@ -210,19 +210,70 @@ export function doesEmailExist(email) {
 }
 
 
+export function getHistory(accountId) {
+    return new Promise((resolve, reject) => {
 
-// // Create table
-// sql = `
-// CREATE TABLE IF NOT EXISTS notes (
-//     id INTEGER PRIMARY KEY AUTOINCREMENT,
-//     title TEXT,
-//     content TEXT
-// )
-// `;
+        db.all(
+            `SELECT role, message FROM ai_history WHERE account_id = ? ORDER BY id DESC LIMIT 40`,
+            [accountId], (err, rows) => {
 
-// db.run(sql, (err) => {
-//     if (err) return console.error(err.message);
-// });
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                // reverse so the oldest message comes first
+                rows.reverse();
+
+                resolve(rows);
+            }
+        );
+    });
+}
+
+
+export function updateHistory(accountId, role, message) {
+    return new Promise((resolve, reject) => {
+
+        const sql = `
+            INSERT INTO ai_history(account_id, role, message)
+            VALUES (?, ?, ?)
+        `;
+
+        db.run(
+            sql,
+            [accountId, role, message],
+            function(err) {
+
+                if (err)
+                    return reject(err);
+
+                resolve(this.lastID);
+            }
+        );
+
+    });
+}
+
+export function deleteHistory(deleteId) {
+    return new Promise((resolve, reject) => {
+
+        const sql = `DELETE FROM ai_history WHERE account_id = ? AND id NOT IN (SELECT id FROM ai_history 
+        WHERE account_id = ? ORDER BY id DESC LIMIT 40);`
+
+        db.run(sql, [deleteId, deleteId], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
+}
+
+
+
 
 db.exec(sql, (err) => {
     if (err) console.error(err);

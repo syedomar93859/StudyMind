@@ -1,4 +1,4 @@
-import {getUsername} from './session.js';
+import {getUsername, getAccountId} from './session.js';
 
 document.getElementById("account-name").innerHTML = getUsername();
 
@@ -50,15 +50,45 @@ async function getResponse(){
         content.innerHTML = "Loading...";
         // Tells the user that the AI response is currently being generated
 
-        const result = await sendQuestion(input);
+        const history = await viewHistory(getAccountId());
+
+        const transformedHistory = [];
+
+        for (let i = 0; i < history.length; i++) {
+            transformedHistory.push({
+                role: history[i].role,
+                parts: [{
+                    text: history[i].message
+                }]
+            })
+        }
+
+
+        const result = await sendQuestion(input, transformedHistory, getAccountId());
         // Sends the user's question to the backend and waits for the AI response
+        
+        // transformedHistory.push({
+        // role: "user",
+        // parts: [
+        //     {
+        //         text: question
+        //     }
+        // ]});
+
+        // const updatedConversation = transformedHistory.push({
+        // role: "model",
+        // parts: [
+        //     {
+        //         text: result
+        //     }
+        // ]});
 
         content.innerHTML = result;
         // Displays the AI response on the page
     }
 }
 
-async function sendQuestion(question){
+async function sendQuestion(question, newHistory, accountId){
     const response = await fetch('/message', {
         method: 'POST',
         // Displays the AI response on the page
@@ -69,7 +99,9 @@ async function sendQuestion(question){
         // Tells the server that JSON data is being sent
 
         body: JSON.stringify({
-            question: question
+            question: question,
+            history: newHistory,
+            id: accountId
         })
         // Converts the JavaScript object into JSON text
 
@@ -90,3 +122,21 @@ if (textLink) {
     });
 }
 // navigates to the Home page
+
+async function viewHistory(id) {
+
+    const response = await fetch("/history", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            account_id: id
+        })
+    });
+
+    const data = await response.json();
+
+    return data.history;
+
+}
