@@ -272,6 +272,28 @@ export function deleteHistory(deleteId) {
     });
 }
 
+obtainEmail
+
+
+export function obtainEmail(accountId) {
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT email FROM accounts WHERE id = ? LIMIT 1",
+            [accountId],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(row.email);
+                
+            }
+        );
+    });
+}
 
 
 

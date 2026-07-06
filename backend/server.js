@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 // This executes the code in app.js
 import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
     viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist, getHistory,
-updateHistory, deleteHistory  } from './app.js';
+updateHistory, deleteHistory, obtainEmail  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 
@@ -119,6 +119,19 @@ app.post("/email", async (req, res) => {
 
     res.json({
         truth: exist,
+        success: true
+    });
+});
+
+
+app.post("/bringEmail", async (req, res) => {
+
+    const accountId = req.body.id;
+
+    const accountEmail = await obtainEmail(accountId);
+
+    res.json({
+        email: accountEmail,
         success: true
     });
 });
