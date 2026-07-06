@@ -272,7 +272,6 @@ export function deleteHistory(deleteId) {
     });
 }
 
-obtainEmail
 
 
 export function obtainEmail(accountId) {
@@ -295,6 +294,40 @@ export function obtainEmail(accountId) {
     });
 }
 
+
+export function updateName(newName, accountId) {
+    return new Promise((resolve, reject) => {
+
+        const sql =
+            `UPDATE accounts SET username=? WHERE id=?`;
+
+        db.run(sql, [newName, accountId], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
+}
+
+export function updateEmail(newEmail, accountId) {
+    return new Promise((resolve, reject) => {
+
+        const sql =
+            `UPDATE accounts SET email=? WHERE id=?`;
+
+        db.run(sql, [newEmail, accountId], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
+}
 
 
 db.exec(sql, (err) => {

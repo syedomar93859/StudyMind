@@ -1,4 +1,12 @@
-import {getAccountId, getUsername} from './session.js';
+import {getAccountId, getUsername, setUser} from './session.js';
+
+// provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
+  let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
+  const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
+
+
 
 document.getElementById("account-name").innerHTML = getUsername();
 
@@ -58,6 +66,7 @@ async function showAccount() {
 
     setActive("account-link");
 
+    const currentUsername = getUsername();
     const email = await getEmail(getAccountId());
 
     content.innerHTML = `
@@ -68,7 +77,7 @@ async function showAccount() {
         <input
             id="username"
             type="text"
-            value="${getUsername()}"
+            value="${currentUsername}"
         ><br><br>
 
         <label for="email">Email</label><br>
@@ -85,15 +94,157 @@ async function showAccount() {
     const emailInput = document.getElementById("email");
     const saveButton = document.getElementById("save-btn");
 
-    saveButton.addEventListener("click", () => {
-        alert(
-            "Your new email is " +
-            emailInput.value +
-            " and your new username is " +
-            usernameInput.value
-        );
-    });
+    
+
+    saveButton.addEventListener("click", async () => {
+        try{
+
+        const currentUsername = getUsername();
+
+        const email = await getEmail(getAccountId());
+
+
+        let shouldUpdateEmail = true;
+
+        let emailErrors = 0;
+
+
+        let shouldUpdateName = true;
+
+        let nameErrors = 0;
+
+
+        const errors = [];
+
+        const newName = usernameInput.value.trim();
+
+        const newEmail = emailInput.value.trim();
+
+        if (newName === "") {
+            errors.push("-Username is required.");
+            shouldUpdateName = false;
+
+        }
+        else if (!nameRegex.test(newName)) {
+            errors.push("-Username is invalid.");
+            shouldUpdateName = false;
+
+        }
+        else if (newName === currentUsername) {
+            // errors.push("-Username is unchanged.");
+            shouldUpdateName = false;
+
+        }
+        else {
+            const usernameTaken = await checkUsernameExists(newName);
+            if (usernameTaken) {
+                errors.push("-Username is already in use.");
+                shouldUpdateName = false;
+
+            }
+
+        }
+
+        if (newEmail === "") {
+            errors.push("-Email is required.");
+            shouldUpdateEmail = false;
+        }else if (!emailRegex.test(newEmail)) {
+            errors.push("-Email is invalid.");
+            shouldUpdateEmail = false;
+        }else if (newEmail === email){
+            // errors.push("-Email is unchanged");
+            shouldUpdateEmail = false;
+        }else {
+            const emailTaken = await checkEmailExists(newEmail);
+            if (emailTaken) {
+                errors.push("-Email is already in use.");
+                shouldUpdateEmail = false;
+            }
+        } 
+
+        if (errors.length > 0) {
+            alert(errors.join("\n"));
+
+            return;
+            
+        }
+
+        const updates = [];
+
+        if (shouldUpdateName) {
+            const success = await updateAccountName(getAccountId(), newName);
+            if (success) {
+                setUser(getAccountId(), newName);
+                const accountName = document.getElementById("account-name");
+                if (accountName) accountName.textContent = getUsername();
+                updates.push("Username");
+            }
+        }
+
+        if (shouldUpdateEmail) {
+            const success = await updateAccountEmail(getAccountId(), newEmail);
+            if (success) {
+                updates.push("Email");
+            }
+        }
+
+        if (updates.length > 0) {
+            alert(updates.join(" and ") + " updated successfully!");
+        }
+    }catch (err) {
+        console.error(err);
+        alert(err.message);
+    }
+
+    
+});
 }
+
+async function updateAccountName(accountId, username) {
+
+    const response = await fetch("/newName", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId,
+            name: username
+        })
+    });
+
+    console.log(response.status);
+
+    const data = await response.json();
+
+    console.log(data);
+
+    return data.success;
+}
+
+async function updateAccountEmail(accountId, newEmail) {
+
+    const response = await fetch("/newEmail", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId,
+            email: newEmail
+        })
+    });
+
+    console.log(response.status);
+
+    const data = await response.json();
+
+    console.log(data);
+
+    return data.success;
+}
+
+
 
 async function getEmail(accountId) {
 
@@ -110,6 +261,43 @@ async function getEmail(accountId) {
     const data = await response.json();
 
     return data.email;
+
+}
+
+async function checkEmailExists(email) {
+
+    const response = await fetch("/email", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: email
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
+}
+
+
+async function checkUsernameExists(username) {
+
+    const response = await fetch("/name", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: username
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
 
 }
 
