@@ -294,6 +294,26 @@ export function obtainEmail(accountId) {
     });
 }
 
+export function obtainPassword(accountId) {
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT encrypt_pass FROM accounts WHERE id = ? LIMIT 1",
+            [accountId],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(row.encrypt_pass);
+                
+            }
+        );
+    });
+}
+
 
 export function updateName(newName, accountId) {
     return new Promise((resolve, reject) => {
@@ -325,6 +345,24 @@ export function updateEmail(newEmail, accountId) {
             }
 
             resolve();
+        });
+    });
+}
+
+
+export function changePassword(id, pass) {
+    return new Promise((resolve, reject) => {
+
+        const sql =
+            `UPDATE accounts SET encrypt_pass=? WHERE id=?`;
+
+        db.run(sql, [pass, id], function(err) {
+
+            if (err) {
+                return reject(err);
+            }
+
+            resolve(true);
         });
     });
 }

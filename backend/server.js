@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 // This executes the code in app.js
 import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
     viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist, getHistory,
-updateHistory, deleteHistory, obtainEmail, updateName, updateEmail  } from './app.js';
+updateHistory, deleteHistory, obtainEmail, updateName, updateEmail, obtainPassword, changePassword  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 
@@ -122,6 +122,8 @@ app.post("/newName", async (req, res) => {
     });
 });
 
+
+
 app.post("/newEmail", async (req, res) => {
 
     const newEmail = req.body.email;
@@ -133,6 +135,47 @@ app.post("/newEmail", async (req, res) => {
     res.json({
         success: true
     });
+});
+
+app.post("/getPass", async (req, res) => {
+
+    const accountId = req.body.id;
+    const password = req.body.pass;
+
+    const storedPass = await obtainPassword(accountId);
+
+    const same = await verifyPassword(password, storedPass);
+    
+    res.json({
+        success: true,
+        truth: same
+    });
+});
+
+app.post("/newPass", async (req, res) => {
+    try {
+
+        const accountId = req.body.id;
+        const password = req.body.pass;
+
+        const securePass = await encryptPassword(password);
+
+        await changePassword(accountId, securePass);
+
+        res.json({
+            success: true,
+            truth: true
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            success: false,
+            truth: false
+        });
+    }
 });
 
 app.post("/email", async (req, res) => {

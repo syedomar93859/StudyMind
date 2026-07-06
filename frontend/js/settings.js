@@ -1,14 +1,13 @@
 import {getAccountId, getUsername, setUser} from './session.js';
 
 // provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
-  let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
   const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
 
 
-
-document.getElementById("account-name").innerHTML = getUsername();
+document.getElementById("account-name").textContent = getUsername();
 
 document.getElementById("go-to-ai-button")
     .addEventListener("click", goToAIPage);
@@ -106,12 +105,8 @@ async function showAccount() {
 
         let shouldUpdateEmail = true;
 
-        let emailErrors = 0;
-
 
         let shouldUpdateName = true;
-
-        let nameErrors = 0;
 
 
         const errors = [];
@@ -313,9 +308,11 @@ async function checkUsernameExists(username) {
 // }
 
 
-function showSecurity() {
+async function showSecurity() {
 
     setActive("security-link");
+
+    // const currentId = getAccountId();
 
     content.innerHTML = `
         <h2>Security</h2>
@@ -338,9 +335,165 @@ function showSecurity() {
     const confirmPass = document.getElementById("confirmPassword");
     const passButton = document.getElementById("save-pass");
 
-passButton.addEventListener("click", () => {
-    alert("Your current password is " + pass.value + " and your new password is " + newPass.value + " and your confirmed password is " + confirmPass.value + ".");
+
+
+passButton.addEventListener("click", async () => {
+
+    const errors = [];
+
+    const passwordMatches = await getPassword(getAccountId(), pass.value);
+
+    if (passwordMatches && pass.value === newPass.value) {
+        errors.push("❌ New password must be different from the current password");
+    }
+
+    if (pass.value === ""){
+        errors.push("❌ Current Password field is empty");
+    }else if (!passwordMatches) {
+        errors.push("❌ Current password is incorrect");
+    }
+
+    const passDetails = checkPassword(newPass.value);
+
+    if (newPass.value === ""){
+        errors.push("❌ New Password field is empty");
+    }else if (!passDetails.success){
+        errors.push(passDetails.length);
+        errors.push(passDetails.number);
+        errors.push(passDetails.letter);
+        errors.push(passDetails.rarity);
+    }
+
+    if (confirmPass.value === "") {
+        errors.push("❌ Confirm Password field is empty");
+    }else if (newPass.value !== confirmPass.value) {
+        errors.push("❌ New Password and Confirm Password do not match");
+    }
+
+    if (errors.length > 0) {
+        alert(errors.join("\n"));
+        return;
+    }else{
+        const success = await updatePassword(getAccountId(), confirmPass.value);
+        
+        if (!success) {
+            alert("❌ Password update failed");
+            return;
+        }
+
+        pass.value = "";
+        newPass.value = "";
+        confirmPass.value = "";
+        
+        alert("✅ Password has been successfully updated");
+    }
+
+    // alert("Your current password is " + pass.value + " and your new password is " + newPass.value + " and your confirmed password is " + confirmPass.value + ".");
 });
+}
+
+async function updatePassword(accountId, newPassword) {
+
+    const response = await fetch("/newPass", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId,
+            pass: newPassword
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
+}
+
+function checkPassword(password){
+
+    // password.value.charCodeAt(0);
+
+
+    let long = true;
+    let lengthMessage = "✅ New password has at least 8 characters";
+
+    if (password.length < 8){
+        long = false;
+        lengthMessage = "❌ New password has less than 8 characters";
+        
+    }
+    // else if (){
+
+    // }
+
+    let hasLetter = false;
+    let letterMessage = "❌ New password has no letters";
+
+    let hasNumber = false;
+    let numberMessage = "❌ New password has no numbers";;
+
+    for (let i = 0; i < password.length; i++){
+        const code = password.charCodeAt(i);
+        
+        if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122)) {
+            hasLetter = true;
+            letterMessage = "✅ New password has at least one letter";
+        }
+        
+        if (code >= 48 && code <= 57) {
+            hasNumber = true;
+            numberMessage = "✅ New password has at least one number";
+        }
+
+        if (hasLetter && hasNumber) {
+            break;
+        }
+    }
+
+
+    const weakPassword = ["password", "Password", "password1", "password123", "12345678", "123456789", "1234567890", "87654321", 
+        "11111111", "00000000", "123123123", "qwerty12", "qwerty123", "qwertyui", "qwertyuiop", "asdfghjk", "zxcvbnm1", "abc12345",
+        "welcome", "letmein", "football", "baseball", "superman", "dragon12", "monkey12", "sunshine", "princess", "computer", "internet", 
+        "whatever", "trustno1", "master12", "freedom1", "iloveyou", "loveyou1", "charlie1", "password!", "admin123",
+        "administrator", "guest123", "login123"];
+
+    const isWeak = weakPassword.includes(password);
+
+    let rarityMessage = "✅ New password is not a commonly used password";
+
+    if (isWeak){
+        rarityMessage = "❌ New password is a common password";
+    }
+
+    return {
+        length: lengthMessage,
+        number: numberMessage,
+        letter: letterMessage,
+        rarity: rarityMessage,
+        success: long && hasLetter && hasNumber && !isWeak,
+    };
+
+}
+
+async function getPassword(accountId, password) {
+
+    const response = await fetch("/getPass", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId,
+            pass: password
+        })
+    });
+
+    const data = await response.json();
+
+    return data.truth;
+
 }
 
 function showPrivacy() {
