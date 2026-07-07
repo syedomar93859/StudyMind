@@ -319,21 +319,49 @@ async function showSecurity() {
         <label>Update your account password below:</label><br><br>
 
         <label>Current Password</label><br>
-        <input id="password" type="password"><br><br>
+        <input id="password" type="password">
+        <button type="button" class="uncoverPass" id="viewPass"> 
+                        <i class="bx bx-show"></i>
+        </button>
+        <br><br>
 
         <label>New Password</label><br>
-        <input id="newPassword" type="password"><br><br>
+        <input id="newPassword" type="password">
+        <button type="button" class="uncoverNewPass" id="viewNewPass"> 
+                        <i class="bx bx-show"></i>
+        </button>
+        <br><br>
 
         <label>Confirm Password</label><br>
-        <input id="confirmPassword" type="password"><br><br>
+        <input id="confirmPassword" type="password">
+        <button type="button" class="uncoverConfirmPass" id="viewConfirmPass"> 
+                        <i class="bx bx-show"></i>
+        </button>
+        <br><br>
 
         <button id="save-pass">Update Password</button>
     `;
+    
+    const viewPass = document.getElementById("viewPass");
+    const viewNewPass = document.getElementById("viewNewPass");
+    const viewConfirmPass = document.getElementById("viewConfirmPass");
 
     const pass = document.getElementById("password");
     const newPass = document.getElementById("newPassword");
     const confirmPass = document.getElementById("confirmPassword");
     const passButton = document.getElementById("save-pass");
+
+    viewPass.addEventListener("click", () => {
+    togglePassword(pass, viewPass);
+});
+
+viewNewPass.addEventListener("click", () => {
+    togglePassword(newPass, viewNewPass);
+});
+
+viewConfirmPass.addEventListener("click", () => {
+    togglePassword(confirmPass, viewConfirmPass);
+});
 
 
 
@@ -391,6 +419,24 @@ passButton.addEventListener("click", async () => {
     // alert("Your current password is " + pass.value + " and your new password is " + newPass.value + " and your confirmed password is " + confirmPass.value + ".");
 });
 }
+
+function togglePassword(input, button) {
+
+    const icon = button.querySelector("i");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("bx-show", "bx-hide");
+    } else {
+        input.type = "password";
+        icon.classList.replace("bx-hide", "bx-show");
+    }
+
+}
+
+
+
+
 
 async function updatePassword(accountId, newPassword) {
 
@@ -527,13 +573,42 @@ logOut.addEventListener("click", () => {
     // alert("You clicked the log out button.");
 });
 
-deleteAccount.addEventListener("click", () => {
-    if (confirm("Are you sure you want to delete this account? Deleting this account means you cannot log in with it anymore.") == true) {
+deleteAccount.addEventListener("click", async () => {
+    if (confirm("Are you sure you want to delete this account? Deleting this account means you cannot log in with it anymore. You will also be sent to the login page.") == true) {
+
+        const success = await removeAccount(getAccountId());
+        
+        if (success) {
+            location.href = "./index.html";
+        } else {
+            alert("Failed to delete account.");
+        }
+
     console.log("User wants to delete account");
   } else {
     console.log("User does not want to delete account");
   }
 });
+}
+
+async function removeAccount(accountId) {
+
+    const response = await fetch("/deleteAccount", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id: accountId
+        })
+    });
+
+    if (!response.ok) {
+        return false;
+    }
+    
+    const data = await response.json();
+    return data.success;
 }
 
 function setActive(id){

@@ -367,6 +367,26 @@ export function changePassword(id, pass) {
     });
 }
 
+export function eliminateAccount(accountId) {
+    return new Promise((resolve, reject) => {        
+        db.serialize(() => {
+            db.run("DELETE FROM notes WHERE account_id = ?", [accountId]);
+            
+            db.run("DELETE FROM ai_history WHERE account_id = ?", [accountId]);
+            
+            db.run("DELETE FROM accounts WHERE id = ?", [accountId], function(err) {
+
+            if (err) {return reject(err);}
+            
+            resolve(this.changes > 0);
+        });
+        }
+    );
+});
+}
+
+
+
 
 db.exec(sql, (err) => {
     if (err) console.error(err);

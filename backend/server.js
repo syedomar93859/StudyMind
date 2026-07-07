@@ -7,7 +7,8 @@ import { fileURLToPath } from 'url';
 // This executes the code in app.js
 import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
     viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist, getHistory,
-updateHistory, deleteHistory, obtainEmail, updateName, updateEmail, obtainPassword, changePassword  } from './app.js';
+updateHistory, deleteHistory, obtainEmail, updateName, updateEmail, obtainPassword, 
+changePassword, eliminateAccount  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 
@@ -234,6 +235,22 @@ app.post("/delete", async (req, res) => {
     res.json({
         success: true
     });
+});
+
+
+app.post("/deleteAccount", async (req, res) => {
+    try {
+        const accountId = req.body.id;
+        console.log("Deleting account:", accountId);
+        
+        const deleted = await eliminateAccount(accountId);
+        console.log("Deleted:", deleted);
+
+        res.json({ success: deleted });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false });
+    }
 });
 
 
