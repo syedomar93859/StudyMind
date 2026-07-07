@@ -1,4 +1,4 @@
-import {getAccountId, getUsername, setUser} from './session.js';
+import {getUsername, setUsername} from './session.js';
 
 // provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -66,7 +66,7 @@ async function showAccount() {
     setActive("account-link");
 
     const currentUsername = getUsername();
-    const email = await getEmail(getAccountId());
+    const email = await getEmail();
 
     content.innerHTML = `
         <h2>Account</h2>
@@ -100,7 +100,7 @@ async function showAccount() {
 
         const currentUsername = getUsername();
 
-        const email = await getEmail(getAccountId());
+        const email = await getEmail();
 
 
         let shouldUpdateEmail = true;
@@ -167,9 +167,9 @@ async function showAccount() {
         const updates = [];
 
         if (shouldUpdateName) {
-            const success = await updateAccountName(getAccountId(), newName);
+            const success = await updateAccountName(newName);
             if (success) {
-                setUser(getAccountId(), newName);
+                setUsername(newName);
                 const accountName = document.getElementById("account-name");
                 if (accountName) accountName.textContent = getUsername();
                 updates.push("Username");
@@ -177,7 +177,7 @@ async function showAccount() {
         }
 
         if (shouldUpdateEmail) {
-            const success = await updateAccountEmail(getAccountId(), newEmail);
+            const success = await updateAccountEmail(newEmail);
             if (success) {
                 updates.push("Email");
             }
@@ -195,7 +195,7 @@ async function showAccount() {
 });
 }
 
-async function updateAccountName(accountId, username) {
+async function updateAccountName(username) {
 
     const response = await fetch("/newName", {
         method: "POST",
@@ -203,7 +203,6 @@ async function updateAccountName(accountId, username) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: accountId,
             name: username
         })
     });
@@ -217,7 +216,7 @@ async function updateAccountName(accountId, username) {
     return data.success;
 }
 
-async function updateAccountEmail(accountId, newEmail) {
+async function updateAccountEmail(newEmail) {
 
     const response = await fetch("/newEmail", {
         method: "POST",
@@ -225,7 +224,6 @@ async function updateAccountEmail(accountId, newEmail) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: accountId,
             email: newEmail
         })
     });
@@ -241,16 +239,14 @@ async function updateAccountEmail(accountId, newEmail) {
 
 
 
-async function getEmail(accountId) {
+async function getEmail() {
 
     const response = await fetch("/bringEmail", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            id: accountId
-        })
+        body: JSON.stringify({})
     });
 
     const data = await response.json();
@@ -369,7 +365,7 @@ passButton.addEventListener("click", async () => {
 
     const errors = [];
 
-    const passwordMatches = await getPassword(getAccountId(), pass.value);
+    const passwordMatches = await getPassword(pass.value);
 
     if (passwordMatches && pass.value === newPass.value) {
         errors.push("❌ New password must be different from the current password");
@@ -402,7 +398,7 @@ passButton.addEventListener("click", async () => {
         alert(errors.join("\n"));
         return;
     }else{
-        const success = await updatePassword(getAccountId(), confirmPass.value);
+        const success = await updatePassword(confirmPass.value);
         
         if (!success) {
             alert("❌ Password update failed");
@@ -438,7 +434,7 @@ function togglePassword(input, button) {
 
 
 
-async function updatePassword(accountId, newPassword) {
+async function updatePassword(newPassword) {
 
     const response = await fetch("/newPass", {
         method: "POST",
@@ -446,7 +442,6 @@ async function updatePassword(accountId, newPassword) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: accountId,
             pass: newPassword
         })
     });
@@ -523,7 +518,7 @@ function checkPassword(password){
 
 }
 
-async function getPassword(accountId, password) {
+async function getPassword(password) {
 
     const response = await fetch("/getPass", {
         method: "POST",
@@ -531,7 +526,6 @@ async function getPassword(accountId, password) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id: accountId,
             pass: password
         })
     });
@@ -563,23 +557,22 @@ function showPrivacy() {
     const logOut = document.getElementById("log-out");
     const deleteAccount = document.getElementById("delete-acc");
 
-logOut.addEventListener("click", () => {
-  if (confirm("Are you sure you want to log out?") == true) {
-    location.href = './index.html'
-  } else {
-  }
-
-
-    // alert("You clicked the log out button.");
+logOut.addEventListener("click", async () => {
+    if (confirm("Are you sure you want to log out?")) {
+        await fetch("/logout", { method: "POST" });
+        sessionStorage.clear();
+        location.href = './index.html';
+    }
 });
 
 deleteAccount.addEventListener("click", async () => {
     if (confirm("Are you sure you want to delete this account? Deleting this account means you cannot log in with it anymore. You will also be sent to the login page.") == true) {
 
-        const success = await removeAccount(getAccountId());
+        const success = await removeAccount();
         
         if (success) {
             location.href = "./index.html";
+            sessionStorage.clear();
         } else {
             alert("Failed to delete account.");
         }
@@ -591,16 +584,14 @@ deleteAccount.addEventListener("click", async () => {
 });
 }
 
-async function removeAccount(accountId) {
+async function removeAccount() {
 
     const response = await fetch("/deleteAccount", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            id: accountId
-        })
+        body: JSON.stringify({})
     });
 
     if (!response.ok) {

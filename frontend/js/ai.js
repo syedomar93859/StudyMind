@@ -1,4 +1,4 @@
-import {getUsername, getAccountId} from './session.js';
+import {getUsername} from './session.js';
 
 document.getElementById("account-name").innerHTML = getUsername();
 
@@ -62,7 +62,7 @@ async function getResponse(){
         content.innerHTML = "Loading...";
         // Tells the user that the AI response is currently being generated
 
-        const history = await viewHistory(getAccountId());
+        const history = await viewHistory();
 
         const transformedHistory = [];
 
@@ -76,7 +76,7 @@ async function getResponse(){
         }
 
 
-        const result = await sendQuestion(input, transformedHistory, getAccountId());
+        const result = await sendQuestion(input, transformedHistory);
         // Sends the user's question to the backend and waits for the AI response
         
         // transformedHistory.push({
@@ -100,22 +100,21 @@ async function getResponse(){
     }
 }
 
-async function sendQuestion(question, newHistory, accountId){
+async function sendQuestion(question, newHistory){
     const response = await fetch('/message', {
         method: 'POST',
-        // Displays the AI response on the page
-
+        // displays the AI response on the page
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
-        // Tells the server that JSON data is being sent
+        // tells the server that JSON data is being sent
 
         body: JSON.stringify({
             question: question,
-            history: newHistory,
-            id: accountId
+            history: newHistory
         })
-        // Converts the JavaScript object into JSON text
+        // converts the JavaScript object into JSON text
 
     });
 
@@ -135,20 +134,21 @@ if (textLink) {
 }
 // navigates to the Home page
 
-async function viewHistory(id) {
-
+async function viewHistory() {
     const response = await fetch("/history", {
         method: "POST",
+        credentials: 'same-origin', 
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            account_id: id
-        })
+        body: JSON.stringify({})
     });
+
+    if (!response.ok) {
+        return [];  // return empty array if not authenticated or any error
+    }
 
     const data = await response.json();
 
-    return data.history;
-
+    return data.history ?? [];  // fallback to empty array if history is undefined
 }

@@ -1,16 +1,19 @@
-let accountId = null;
+// let accountId = null;
 
 let username = null;
 
-export function setUser(id,name){
-    sessionStorage.setItem("accountId", id);
+export function setUsername(name){
     sessionStorage.setItem("username", name);
 }
 
-export function getAccountId(){
-    return Number(sessionStorage.getItem("accountId"));
-}
+// export function getAccountId(){
+//     return Number(sessionStorage.getItem("accountId"));
+// }
 
 export function getUsername(){
-    return sessionStorage.getItem("username");
+    if (sessionStorage.getItem("username") === null || sessionStorage.getItem("username") === undefined) {
+        return "";
+    } else {
+        return sessionStorage.getItem("username");
+    }
 }

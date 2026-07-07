@@ -13,17 +13,34 @@ changePassword, eliminateAccount  } from './app.js';
 import { encryptPassword, verifyPassword  } from './password.js';
 
 
-
+import session from 'express-session';
 
 
 const app = express();
-// Creates the Express server app
-
-const port = 3000;
-// The server will run on http://127.0.0.1:3000/
+// creates the Express server app
 
 app.use(express.json());
 // Lets Express understand incoming JSON data
+
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // set to true if using HTTPS
+}));
+
+function requireAuth(req, res, next) {
+    if (!req.session.accountId) {
+        return res.status(401).json({ success: false, message: "Not authenticated" });
+    }
+    next();
+}
+
+
+
+
+const port = 3000;
+// The server will run on http://127.0.0.1:3000/
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +58,7 @@ app.get('/test', (req, res) => {
 // Defines a test route to confirm the server is running correctly
 // When a GET request is made to /test, it sends a simple text response
 
-app.post('/message', async (req, res) => {
+app.post('/message', requireAuth, async (req, res) => {
     // Runs whenever the frontend sends a POST request to /message
 
     const userQuestion = req.body.question;
@@ -49,7 +66,7 @@ app.post('/message', async (req, res) => {
 
     const history = req.body.history;
 
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     const result = await run(userQuestion, history);
     
@@ -70,9 +87,9 @@ app.post('/message', async (req, res) => {
 });
 
 // This is connected with getInfo
-app.post("/notes", async (req, res) => {
+app.post("/notes",requireAuth, async (req, res) => {
 
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     const notes = await getAllNotes(accountId);
 
@@ -83,11 +100,11 @@ app.post("/notes", async (req, res) => {
 });
 
 // This is connected with sendInfo function
-app.post("/new", async (req, res) => {
+app.post("/new", requireAuth, async (req, res) => {
 
     const title = req.body.title;
     const content = req.body.content;
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     const newId = await insertNote(accountId, title, content);
     viewNoteTable();
@@ -111,10 +128,10 @@ app.post("/name", async (req, res) => {
     });
 });
 
-app.post("/newName", async (req, res) => {
+app.post("/newName", requireAuth, async (req, res) => {
 
     const username = req.body.name;
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     await updateName(username, accountId);
     
@@ -125,10 +142,10 @@ app.post("/newName", async (req, res) => {
 
 
 
-app.post("/newEmail", async (req, res) => {
+app.post("/newEmail", requireAuth, async (req, res) => {
 
     const newEmail = req.body.email;
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     await updateEmail(newEmail, accountId);
     viewAccountTable();
@@ -138,9 +155,9 @@ app.post("/newEmail", async (req, res) => {
     });
 });
 
-app.post("/getPass", async (req, res) => {
+app.post("/getPass", requireAuth, async (req, res) => {
 
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
     const password = req.body.pass;
 
     const storedPass = await obtainPassword(accountId);
@@ -153,10 +170,16 @@ app.post("/getPass", async (req, res) => {
     });
 });
 
-app.post("/newPass", async (req, res) => {
+
+app.post("/logout", (req, res) => {
+    req.session.destroy();
+    res.json({ success: true });
+});
+
+app.post("/newPass", requireAuth, async (req, res) => {
     try {
 
-        const accountId = req.body.id;
+        const accountId = req.session.accountId;
         const password = req.body.pass;
 
         const securePass = await encryptPassword(password);
@@ -193,9 +216,9 @@ app.post("/email", async (req, res) => {
 });
 
 
-app.post("/bringEmail", async (req, res) => {
+app.post("/bringEmail", requireAuth, async (req, res) => {
 
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
 
     const accountEmail = await obtainEmail(accountId);
 
@@ -206,14 +229,14 @@ app.post("/bringEmail", async (req, res) => {
 });
 
 
-app.post("/update", async (req, res) => {
+app.post("/update", requireAuth, async (req, res) => {
 
-    const accountId = req.body.id;
+    const accountId = req.session.accountId;
     const title = req.body.title;
     const content = req.body.content;
     const index = req.body.index;
 
-    editNote(accountId, index, title, content);
+    await editNote(accountId, index, title, content);
 
     viewNoteTable();
 
@@ -223,10 +246,10 @@ app.post("/update", async (req, res) => {
 });
 
 
-app.post("/delete", async (req, res) => {
+app.post("/delete",requireAuth, async (req, res) => {
 
     const deleteId = req.body.id;
-    const accountId = req.body.accountId;
+    const accountId = req.session.accountId;
 
     await removeNote(deleteId, accountId);
 
@@ -238,19 +261,12 @@ app.post("/delete", async (req, res) => {
 });
 
 
-app.post("/deleteAccount", async (req, res) => {
-    try {
-        const accountId = req.body.id;
-        console.log("Deleting account:", accountId);
-        
-        const deleted = await eliminateAccount(accountId);
-        console.log("Deleted:", deleted);
+app.post("/deleteAccount", requireAuth, async (req, res) => {
+    const accountId = req.session.accountId; // from session, not req.body
 
-        res.json({ success: deleted });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false });
-    }
+    await eliminateAccount(accountId);
+    req.session.destroy();
+    res.json({ success: true });
 });
 
 
@@ -311,17 +327,21 @@ app.post("/check", async (req, res) => {
 
     viewAccountTable();
 
-    res.json({
-        truth: same,
-        username: found.username,
-        id: found.id,
-        success: true
+    
+
+    if (same) {
+        req.session.accountId = found.id;
+    }
+    
+    res.json({ 
+        truth: same, 
+        username: found.username, 
     });
 });
 
-app.post("/history", async (req, res) => {
+app.post("/history", requireAuth, async (req, res) => {
 
-    const accountId = req.body.account_id;
+    const accountId = req.session.accountId;
 
     const details = await getHistory(accountId);
 

@@ -1,4 +1,4 @@
-import {setUser} from './session.js';
+import {setUsername} from './session.js';
 
 const loginForm = document.querySelector(".login-form");
 const registerForm = document.querySelector(".register-form");
@@ -265,7 +265,7 @@ loginForm.addEventListener("submit", async function(event) {
 
     if(account.truth){
 
-        setUser(account.id, account.username);
+        setUsername(account.username);
 
         alert("Account exists.");
 
@@ -368,6 +368,7 @@ async function findAccount(email, password) {
 
     const response = await fetch("/check", {
         method: "POST",
+        credentials: 'same-origin',
         headers: {
             "Content-Type": "application/json"
         },
