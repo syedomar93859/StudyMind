@@ -315,24 +315,30 @@ async function showSecurity() {
         <label>Update your account password below:</label><br><br>
 
         <label>Current Password</label><br>
+        <div class="password-field">
         <input id="password" type="password">
         <button type="button" class="uncoverPass" id="viewPass"> 
                         <i class="bx bx-show"></i>
         </button>
+        </div>
         <br><br>
 
         <label>New Password</label><br>
+        <div class="password-field">
         <input id="newPassword" type="password">
         <button type="button" class="uncoverNewPass" id="viewNewPass"> 
                         <i class="bx bx-show"></i>
         </button>
+        </div>
         <br><br>
 
         <label>Confirm Password</label><br>
+        <div class="password-field">
         <input id="confirmPassword" type="password">
         <button type="button" class="uncoverConfirmPass" id="viewConfirmPass"> 
                         <i class="bx bx-show"></i>
         </button>
+        </div>
         <br><br>
 
         <button id="save-pass">Update Password</button>

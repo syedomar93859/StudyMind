@@ -294,6 +294,27 @@ export function obtainEmail(accountId) {
     });
 }
 
+export function obtainUsername(accountId) {
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT username FROM accounts WHERE id = ?",
+            [accountId],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
+                resolve(row.username);
+
+            }
+        );
+
+    });
+}
+
 export function obtainPassword(accountId) {
     return new Promise((resolve, reject) => {
 

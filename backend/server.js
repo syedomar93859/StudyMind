@@ -4,11 +4,11 @@ import { marked } from 'marked';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// This executes the code in app.js
+// this executes the code in app.js
 import { insertNote, viewNoteTable, editNote, getAllNotes, removeNote, insertAccount, 
     viewAccountTable, checkAccountExists, doesNameExist, doesEmailExist, getHistory,
-updateHistory, deleteHistory, obtainEmail, updateName, updateEmail, obtainPassword, 
-changePassword, eliminateAccount  } from './app.js';
+updateHistory, deleteHistory, obtainEmail,obtainUsername, updateName, updateEmail, 
+obtainPassword, changePassword, eliminateAccount  } from './app.js';
 
 import { encryptPassword, verifyPassword  } from './password.js';
 
@@ -36,6 +36,20 @@ function requireAuth(req, res, next) {
     next();
 }
 
+app.get("/me", requireAuth, async (req, res) => {
+
+    const accountId = req.session.accountId;
+
+    const username = await obtainUsername(accountId);
+    const email = await obtainEmail(accountId);
+
+    res.json({
+        success: true,
+        username,
+        email
+    });
+
+});
 
 
 
@@ -61,12 +75,23 @@ app.get('/test', (req, res) => {
 app.post('/message', requireAuth, async (req, res) => {
     // Runs whenever the frontend sends a POST request to /message
 
+    const accountId = req.session.accountId;
+
     const userQuestion = req.body.question;
     // Gets the question sent from the frontend
 
-    const history = req.body.history;
+    // const history = req.body.history;
+    const historyRows = await getHistory(accountId);
+    
+    const history = historyRows.map(item => ({
+        role: item.role,
+        parts: [
+            {
+                text: item.message
+            }
+        ]
+    }));
 
-    const accountId = req.session.accountId;
 
     const result = await run(userQuestion, history);
     

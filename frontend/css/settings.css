@@ -24,8 +24,8 @@ html {
 
 body{
   font-family: "Inter", system-ui, sans-serif;
-  background-color: #121212; /* this sets the background color of the whole page */
-  color: #f3f4f6;            /* this sets he text to a a nice white */
+  background-color: #121212;
+  color: #f3f4f6;
 }
 
 .main-button {
@@ -153,13 +153,13 @@ body{
     font-weight:600;
 }
 
-/* When you mouse over the navigation links, change their color */
+/* when you mouse over the navigation links, change their color */
 .sidenav a:hover {
     color: lightgray;
     background:#265B6A;
 }
 
-/* Style page content */
+/* style page content */
 .main{
     flex:1;
 
@@ -168,7 +168,69 @@ body{
     padding:25px;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+#save-btn{
+    background-color: #1D647B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#save-pass{
+    background-color: #1D647B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#log-out{
+    background-color: #1D647B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#delete-acc{
+    background-color: #1D647B;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.password-field {
+    display: inline-flex;
+    align-items: center;
+}
+
+.password-field button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: 8px;
+    padding: 0;
+}
+
+.password-field i {
+    font-size: 22px;
+}
+
+.password-field button:hover {
+    color: #5ec8ff;
+}
+
+/* on smaller screens, where height is less than 450px, change the style of the sidebar */
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}

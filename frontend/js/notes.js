@@ -1,6 +1,24 @@
-import {getUsername} from './session.js';
+import { getUsername, restoreSession } from './session.js';
 
-document.getElementById("account-name").innerHTML = getUsername();
+// this immediately checks whether the user has a valid logged-in session before allowing the rest of the page to load
+(async () => {
+
+    const loggedIn = await restoreSession();
+
+    // if the session is invalid, redirect the user back to the login page.
+    if (!loggedIn) {
+        location.href = "./index.html";
+        return;
+    }
+
+    // Display the username of the currently logged-in user.
+    document.getElementById("account-name").textContent = getUsername();
+
+    // Load all of the user's saved notes after authentication succeeds.
+    await renderNotes();
+
+})();
+
 
 document.getElementById("go-to-ai-button")
     .addEventListener("click", goToAIPage);
@@ -10,9 +28,7 @@ function goToAIPage() {
 }
 // navigates to the Ask AI page
 
-// function goToHomePage() {
-//     location.href = './index.html'
-// }
+
 
 document.getElementById("go-to-notes-button")
     .addEventListener("click", goToNotesPage);
@@ -20,7 +36,6 @@ document.getElementById("go-to-notes-button")
 function goToNotesPage() {
     location.href = './notes.html'
 }
-
 // navigates to the Notes page
 
 
@@ -30,7 +45,7 @@ document.getElementById("go-to-settings-button")
 function goToSettingsPage(){
     location.href = './settings.html'
 }
-
+// navigates to the settings page
 
 
 const textLink = document.getElementById("clickable-text");
@@ -46,10 +61,12 @@ if (textLink) {
 let editingNoteId = null;
 
 
+// handles both creating new notes and updating existing ones
 async function saveNote(event){
     event.preventDefault();
     // this function stops the form from refreshing the page
 
+    // this removes any accidental whitespace from the beginning/end of the inputs
     const title = document.getElementById('noteTitle').value.trim();
     const content = document.getElementById('noteContent').value.trim();
 
@@ -68,12 +85,15 @@ async function saveNote(event){
     }
     
     closeNoteDialog();
+
+    // refresh the displayed notes so the changes immediately appear
     await renderNotes();
 }
 
-
+// retrieves every note belonging to the logged-in user and displays them on the page
 async function renderNotes(){
 
+    // the container where all note cards will be displayed
     const notesContainer = document.getElementById('notesContainer');
 
     const allNotes = await getAllNotes();
@@ -95,6 +115,7 @@ async function renderNotes(){
         return
     }
 
+    // convert each note object into HTML and display them
     notesContainer.innerHTML = allNotes.map(note =>`
         <div class="note-card">
             <h3>${note.title}</h3>
@@ -108,6 +129,8 @@ async function renderNotes(){
     ).join(``);
 }
 
+// if a note ID is given, populate the dialog for editing
+// otherwise, prepare an empty dialog for creating a new note
 async function openNoteDialog(noteId = null){
 
     const dialog = document.getElementById('noteDialog');
@@ -119,7 +142,11 @@ async function openNoteDialog(noteId = null){
 
         const allNotes = await getAllNotes();
 
-        const noteToEdit = allNotes.find(note => String(note.id) === String(noteId));
+        const noteToEdit = allNotes.find(
+            // Find the selected note so its current values can be loaded.
+            note => String(note.id) === String(noteId)
+        );
+
         editingNoteId = noteId;
         document.getElementById('dialogTitle').textContent = 'Edit Note';
         titleInput.value = noteToEdit.title;
@@ -141,9 +168,10 @@ function closeNoteDialog(){
     document.getElementById('noteDialog').close();
 }
 
+// register all event listeners once the page has finished loading
 document.addEventListener('DOMContentLoaded', function(){
-    renderNotes();
 
+    // this listens for edit/delete button clicks on any note card
     document.getElementById('notesContainer').addEventListener('click', async (event) => {
         const editBtn = event.target.closest('.edit-btn');
         const deleteBtn = event.target.closest('.delete-btn');
@@ -166,13 +194,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
     document.getElementById('noteForm').addEventListener('submit', saveNote);
 
+    // close the dialog when the user clicks outside of it
     document.getElementById('noteDialog').addEventListener('click', function(event){
         if(event.target === this) closeNoteDialog();
     });
 });
 
 
-
+// requests every note associated with the currently logged-in account
 async function getAllNotes() {
 
     const response = await fetch("/notes", {
@@ -184,6 +213,7 @@ async function getAllNotes() {
         body: JSON.stringify({})
     });
 
+    // return an empty array if the request failed
     if (!response.ok) {
         return [];
     }
@@ -192,6 +222,7 @@ async function getAllNotes() {
     return data.notes ?? [];
 }
 
+// sends a newly created note to the backend and returns the database ID assigned to it
 async function sendInfo(title, content) {
 
     const response = await fetch("/new", {
@@ -212,6 +243,7 @@ async function sendInfo(title, content) {
 
 }
 
+// sends updated note information to the backend
 async function updateNote(index, title, content) {
 
     const response = await fetch("/update", {
@@ -230,7 +262,7 @@ async function updateNote(index, title, content) {
 
 }
 
-
+// deletes a note after confirmation by the user
 async function deleteNote(noteId) {
 
     const confirmed = confirm(
@@ -255,6 +287,7 @@ async function deleteNote(noteId) {
     const data = await response.json();
 
     if (data.success) {
+        // refresh the page so the deleted note disappears immediately
         await renderNotes();
     }
 }
