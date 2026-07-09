@@ -2,6 +2,8 @@ import { GoogleGenAI } from '@google/genai';
 import 'dotenv/config';
 // Loads environment variables from the .env file
 
+console.log("API KEY:", process.env.GEMINI_API_KEY);
+
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
