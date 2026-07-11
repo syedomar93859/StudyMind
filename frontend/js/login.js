@@ -8,6 +8,11 @@ const registerTitle = document.querySelector(".title-register");
 const signUpBtn = document.querySelector("#signUpBtn");
 const signInBtn = document.querySelector("#signInBtn");
 
+const customAlert = document.getElementById("customAlert");
+
+const confirmBtn = document.getElementById("confirmBtn");
+
+
 const password = document.getElementById("reg-pass");
 const viewButton = document.getElementById("viewPass");
 const icon = viewButton.querySelector("i");
@@ -267,13 +272,31 @@ loginForm.addEventListener("submit", async function(event) {
 
         setUsername(account.username);
 
-        alert("Account exists.");
+        // alert("Account exists.");
 
         goToHomePage();
 
     }else{
 
-        alert("Email or password is invalid.");
+        // alert("Email or password is invalid.");
+        console.log("Email or password is invalid.");
+
+        const customAlert = document.getElementById("customAlert");
+        
+        customAlert.style.display = "flex";
+
+        const closeBox = document.getElementById("closeAlert");
+
+        const diffCloseBox = document.getElementById("confirmAlert");
+        
+        closeBox.addEventListener("click", () => {
+            customAlert.style.display = "none";
+        });
+
+        diffCloseBox.addEventListener("click", () => {
+            customAlert.style.display = "none";
+        });
+        
 
     }
 });
@@ -465,6 +488,8 @@ document.addEventListener("keydown", function (event) {
     closeModal();
   }
 });
+
+
 
 function closeModal() {
   modal.classList.remove("show");

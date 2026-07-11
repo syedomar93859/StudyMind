@@ -118,23 +118,30 @@
             </form>
 
             <div id="modal" class="modal-overlay">
-                            <div class="modal-box">
+                <div class="modal-box">
+                    <h2>Terms & Conditions<br></h2>
+                    <p>By creating an account, you agree that:</p>
+                    <ul>
+                        <li>This application is a portfolio and educational project.</li>
+                        <li>Do not use sensitive or real passwords.</li>
+                        <li>Information entered may be stored for demonstration purposes.</li>
+                        <li>Registered accounts may be reset or deleted without notice.</li>
+                        <li>Thank you for trying out this project.</li>
+                    </ul>
+                    <button id="closeBtn" class="modal-close">x</button>
+                </div>
+            </div>
 
-                                <h2>Terms & Conditions<br></h2>
-                                <p>By creating an account, you agree that:</p>
-                                
-                                <ul>
-                                    <li>This application is a portfolio and educational project.</li>
-                                    <li>Do not use sensitive or real passwords.</li>
-                                    <li>Information entered may be stored for demonstration purposes.</li>
-                                    <li>Registered accounts may be reset or deleted without notice.</li>
-                                    <li>Thank you for trying out this project.</li>
-                                </ul>
-                                <button id="closeBtn" class="modal-close">x</button>
-
-                                
-                            </div>
-                        </div>
+            <div id ="customAlert" class="alert-box">
+                <div class="alert-content">
+                    <button id="closeAlert" class="alert-close">
+                        <i class="bx bx-x"></i>
+                    </button>
+                    <h2>Logging Failed</h2>
+                    <p>Email or password is invalid.</p>
+                    <button id="confirmAlert">Ok</button>
+                </div>
+            </div>
     </div>
 </body>
 </html>
