@@ -230,13 +230,15 @@ html {
 }
 
 .input-field:focus ~ .label,
-.input-field:valid ~ .label{
+.input-field:not(:placeholder-shown) ~ .label {
     top: 0;
     font-size: 14px;
-    background-color: #FFF;
+    background: #FFF;
     color: #0d1936;
     padding: 0 10px;
 }
+
+
 
 .input-field:valid ~ .label{
     color: black;;
@@ -423,7 +425,8 @@ html {
     padding: 25px;
     border-radius: 10px;
 
-    width: 350px;
+    width: 400px;
+    min-height: 175px;  
 
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,.4);

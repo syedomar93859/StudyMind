@@ -158,7 +158,12 @@ async function showAccount() {
         } 
 
         if (errors.length > 0) {
-            alert(errors.join("\n"));
+
+            // showConfirmUpdate(title, message, buttonName, cancelExists)
+
+            await showCustomAlert("Invalid Changes", errors.join("<br>"), "Ok", true);
+            
+            // alert(errors.join("\n"));
 
             return;
             
@@ -184,11 +189,14 @@ async function showAccount() {
         }
 
         if (updates.length > 0) {
-            alert(updates.join(" and ") + " updated successfully!");
+            // alert(updates.join(" and ") + " updated successfully!");
+
+            await showCustomAlert("Changes Saved", updates.join(" and ") + " updated successfully!","Done",false);
         }
     }catch (err) {
         console.error(err);
-        alert(err.message);
+        // alert(err.message);
+        await showCustomAlert("Update Error", "Username or email could not be successfully updated.", "Ok", true);
     }
 
     
@@ -401,13 +409,17 @@ passButton.addEventListener("click", async () => {
     }
 
     if (errors.length > 0) {
-        alert(errors.join("\n"));
+        // alert(errors.join("\n"));
+
+        await showCustomAlert("Password Not Updated", errors.join("<br>"), "Ok", true);
         return;
     }else{
         const success = await updatePassword(confirmPass.value);
         
         if (!success) {
-            alert("❌ Password update failed");
+            
+            await showCustomAlert("Password Update Failed", "There was an error while updating the password, please try again.","Ok", true);
+            // alert("❌ Password update failed");
             return;
         }
 
@@ -415,12 +427,58 @@ passButton.addEventListener("click", async () => {
         newPass.value = "";
         confirmPass.value = "";
         
-        alert("✅ Password has been successfully updated");
+        // alert("✅ Password has been successfully updated");
+        await showCustomAlert("Password Updated", "Password has been successfully updated.", "Ok", false);
     }
 
     // alert("Your current password is " + pass.value + " and your new password is " + newPass.value + " and your confirmed password is " + confirmPass.value + ".");
 });
 }
+
+const customAlert = document.getElementById("customAlert");
+const closeBox = document.getElementById("closeAlert");
+const confirmBox = document.getElementById("confirmAlert");
+
+const alertTitle = document.getElementById("alertTitle");
+const alertMessage = document.getElementById("alertMessage");
+
+function showCustomAlert(title, message, buttonName = "OK", cancelExists = true) {
+    return new Promise((resolve) => {
+
+        alertTitle.textContent = title;
+        alertMessage.innerHTML = message;
+        confirmBox.textContent = buttonName;
+
+        if (!cancelExists){
+            closeBox.style.display = 'none';
+        }else{
+            closeBox.style.display = 'block';
+        }
+
+        customAlert.style.display = "flex";
+
+        function onConfirm() {
+            customAlert.style.display = "none";
+            cleanup();
+            resolve(true);
+        }
+
+        function onClose() {
+            customAlert.style.display = "none";
+            cleanup();
+            resolve(false);
+        }
+
+        function cleanup() {
+            confirmBox.removeEventListener("click", onConfirm);
+            closeBox.removeEventListener("click", onClose);
+        }
+
+        confirmBox.addEventListener("click", onConfirm);
+        closeBox.addEventListener("click", onClose);
+    });
+}
+
 
 function togglePassword(input, button) {
 
@@ -564,29 +622,51 @@ function showPrivacy() {
     const deleteAccount = document.getElementById("delete-acc");
 
 logOut.addEventListener("click", async () => {
-    if (confirm("Are you sure you want to log out?")) {
-        await fetch("/logout", { method: "POST" });
-        sessionStorage.clear();
-        location.href = './index.html';
+    const confirmed = await showCustomAlert(
+        "Log Out",
+        "Are you sure you want to log out?",
+        "Log Out",
+        true
+    );
+
+    if (!confirmed) {
+        return;
     }
+
+    await fetch("/logout", { method: "POST" });
+    sessionStorage.clear();
+    location.href = "./index.html";
 });
 
 deleteAccount.addEventListener("click", async () => {
-    if (confirm("Are you sure you want to delete this account? Deleting this account means you cannot log in with it anymore. You will also be sent to the login page.") == true) {
+    const confirmed = await showCustomAlert(
+        "Delete Account",
+        "Are you sure you want to delete this account?",
+        "Delete",
+        true
+    );
+
+    if (!confirmed) 
+        return;
+
+    try {
 
         const success = await removeAccount();
-        
-        if (success) {
-            location.href = "./index.html";
-            sessionStorage.clear();
-        } else {
-            alert("Failed to delete account.");
+
+        if (!success) {
+            await showCustomAlert("Deletion Failed", "Your account could not be deleted.", "Ok", true);
+            return;
         }
 
-    console.log("User wants to delete account");
-  } else {
-    console.log("User does not want to delete account");
-  }
+        await fetch("/logout", { method: "POST" });
+        sessionStorage.clear();
+        location.href = "./index.html";
+
+    } catch (err) {
+        console.error(err);
+        await showCustomAlert("Network Error","Unable to delete your account. Please try again.","Ok", true);
+    }
+
 });
 }
 

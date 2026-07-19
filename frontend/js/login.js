@@ -5,12 +5,10 @@ const registerForm = document.querySelector(".register-form");
 const wrapper = document.querySelector(".wrapper");
 const loginTitle = document.querySelector(".title-login");
 const registerTitle = document.querySelector(".title-register");
-const signUpBtn = document.querySelector("#signUpBtn");
-const signInBtn = document.querySelector("#signInBtn");
+// const signUpBtn = document.querySelector("#signUpBtn");
+// const signInBtn = document.querySelector("#signInBtn");
 
-const customAlert = document.getElementById("customAlert");
-
-const confirmBtn = document.getElementById("confirmBtn");
+// const confirmBtn = document.getElementById("confirmBtn");
 
 
 const password = document.getElementById("reg-pass");
@@ -181,78 +179,81 @@ function clearRegisterForm() {
 }
 
 document.getElementById("signUpBtn").addEventListener("click", async function() {
-  const regName = document.getElementById("reg-name").value;
-  const regEmail = document.getElementById("reg-email").value;
-  const regPass = document.getElementById("reg-pass").value;
-  const agreed = document.getElementById("agree").checked;
+    const regName = document.getElementById("reg-name").value;
+    const regEmail = document.getElementById("reg-email").value;
+    const regPass = document.getElementById("reg-pass").value;
+    const agreed = document.getElementById("agree").checked;
 
-  // provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
-  let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // provided by https://www.geeksforgeeks.org/javascript/how-to-validate-email-address-using-regexp-in-javascript/
+    let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
-  const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
+    // provided by https://www.geeksforgeeks.org/javascript/username-validation-in-js-regex/
+    const nameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,15}$/;
 
-  const usernameExists = await checkUsernameExists(regName.trim());
+    const usernameExists = await checkUsernameExists(regName.trim());
 
-  const emailExists = await checkEmailExists(regEmail.trim());
+    const emailExists = await checkEmailExists(regEmail.trim());
 
-  const strongPassword = checkPassword(regPass);
+    const strongPassword = checkPassword(regPass);
 
-  let errors = [];
+    let errors = [];
 
-  if (regName.trim() === "") {
-    errors.push("-Username is required.");
-  }else if(usernameExists){
-    errors.push("-Username has already been picked.");
-  }else if(!nameRegex.test(regName)){
-    errors.push("-Username is invalid.");
-  }
+    if (regName.trim() === "") {
+        errors.push("-Username is required.");
+    }else if(usernameExists){
+        errors.push("-Username is already taken.");
+    }else if(!nameRegex.test(regName.trim())){
+        errors.push("-Username is invalid.");
+    }
+
+    if (regEmail.trim() === "") {
+        errors.push("-Email is required.");
+    }else if (emailExists) {
+        errors.push("-An account already exists with this email address.");
+    }else if (!emailRegex.test(regEmail.trim())) {
+        errors.push("-Email address is invalid.");
+    }
   
-  if (regEmail.trim() === "") {
-    errors.push("-Email is required.");
-  }else if(emailExists){
-    errors.push("-This email already has an account.");
-  }else if(!emailRegex.test(regEmail)){
-    errors.push("-Email is invalid.");
-  }
+    if (regPass === "") {
+        errors.push("-Password is required.");
+    }else if (!strongPassword.success) {
+        errors.push("-Password does not meet all requirements.");
+    }
+
+    if (!agreed) {
+        errors.push("-You must agree to the Terms & Conditions.");
+    }
   
-  if (regPass === "") {
-    errors.push("-Password is required.");
-  }else if (!strongPassword.success) {
-    errors.push("-Password does not meet all requirements.");
-  }
-
-  if (!agreed) {
-    errors.push("-You must agree to the Terms & Conditions.");
-  }
-  
-  if (errors.length > 0) {
-    alert(errors.join("\n"));
-    return;
-  }
-
-//   const securePass = await encryptPassword(regPass);
-
-    
-  
-
-  try {
-   const data = await createAccount(regName, regEmail, regPass);
-
-    if (!data.success) {
-        alert(data.message);
+    if (errors.length > 0) {
+        showCustomAlert("Registration Failed", errors.join("<br>"));
+        // alert(errors.join("\n"));
         return;
     }
 
-    alert("Account successfully created. You can log in with this account.")
-    
-    loginFunction(); 
+    //   const securePass = await encryptPassword(regPass);
 
-    }
-    catch (err) {
-        console.error(err);
-        alert(err.message);
-    }
+    
+  
+
+    try {
+        const data = await createAccount(regName, regEmail, regPass);
+
+        if (!data.success) {
+            // alert(data.message);
+            showCustomAlert("Account Creation Failed", "An unexpected error occurred while creating your account.");
+            return;
+        }
+
+        // alert("Account successfully created. You can log in with this account.")
+        showCustomAlert("Account Created", "You can now log in with this account.");
+    
+        loginFunction(); 
+
+        }catch (err) {
+            console.error(err);
+            
+            showCustomAlert("Unexpected Error","Something went wrong. Please try again later.");
+        }
   
 
 });
@@ -281,25 +282,47 @@ loginForm.addEventListener("submit", async function(event) {
         // alert("Email or password is invalid.");
         console.log("Email or password is invalid.");
 
-        const customAlert = document.getElementById("customAlert");
+        // const customAlert = document.getElementById("customAlert");
         
-        customAlert.style.display = "flex";
+        // customAlert.style.display = "flex";
 
-        const closeBox = document.getElementById("closeAlert");
+        // const closeBox = document.getElementById("closeAlert");
 
-        const diffCloseBox = document.getElementById("confirmAlert");
+        // const diffCloseBox = document.getElementById("confirmAlert");
         
-        closeBox.addEventListener("click", () => {
-            customAlert.style.display = "none";
-        });
+        // closeBox.addEventListener("click", () => {
+        //     customAlert.style.display = "none";
+        // });
 
-        diffCloseBox.addEventListener("click", () => {
-            customAlert.style.display = "none";
-        });
+        // diffCloseBox.addEventListener("click", () => {
+        //     customAlert.style.display = "none";
+        // });
         
+        showCustomAlert("Login Failed", "Email or password is invalid.");
 
     }
 });
+
+const customAlert = document.getElementById("customAlert");
+const closeBox = document.getElementById("closeAlert");
+const confirmBox = document.getElementById("confirmAlert");
+const alertTitle = document.getElementById("alertTitle");
+const alertMessage = document.getElementById("alertMessage");
+
+closeBox.addEventListener("click", () => {
+    customAlert.style.display = "none";
+});
+
+confirmBox.addEventListener("click", () => {
+    customAlert.style.display = "none";
+});
+
+
+function showCustomAlert(title, message) {
+    alertTitle.textContent = title;
+    alertMessage.innerHTML = message;
+    customAlert.style.display = "flex";
+}
 
 function checkPassword(password){
 

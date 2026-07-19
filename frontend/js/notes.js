@@ -265,9 +265,7 @@ async function updateNote(index, title, content) {
 // deletes a note after confirmation by the user
 async function deleteNote(noteId) {
 
-    const confirmed = confirm(
-        "Are you sure you want to delete this note?"
-    );
+    const confirmed = await showConfirm();
 
     if (!confirmed) {
         return;
@@ -287,8 +285,37 @@ async function deleteNote(noteId) {
     const data = await response.json();
 
     if (data.success) {
-        // refresh the page so the deleted note disappears immediately
         await renderNotes();
     }
+}
+
+function showConfirm() {
+    return new Promise((resolve) => {
+        const customAlert = document.getElementById("customAlert");
+        const closeBox = document.getElementById("closeAlert");
+        const confirmBox = document.getElementById("confirmAlert");
+
+        customAlert.style.display = "flex";
+
+        function onConfirm() {
+            customAlert.style.display = "none";
+            cleanup();
+            resolve(true);  // user confirmed
+        }
+
+        function onClose() {
+            customAlert.style.display = "none";
+            cleanup();
+            resolve(false);  // user cancelled
+        }
+
+        function cleanup() {
+            confirmBox.removeEventListener("click", onConfirm);
+            closeBox.removeEventListener("click", onClose);
+        }
+
+        confirmBox.addEventListener("click", onConfirm);
+        closeBox.addEventListener("click", onClose);
+    });
 }
 

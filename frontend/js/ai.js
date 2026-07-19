@@ -74,7 +74,22 @@ async function getResponse(){
     // Gets the text from the textarea
 
     if (input.length == 0){
-        alert("Input box is empty!");
+        const customAlert = document.getElementById("customAlert");
+        const closeBox = document.getElementById("closeAlert");
+        const confirmBox = document.getElementById("confirmAlert");
+
+        customAlert.style.display = "flex";
+        
+        closeBox.addEventListener("click", () => {
+            customAlert.style.display = "none";
+        });
+        
+        confirmBox.addEventListener("click", () => {
+            customAlert.style.display = "none";
+        });
+
+
+        // alert("Input box is empty!");
         // Shows an alert if the user did not type anything
 
     } else{

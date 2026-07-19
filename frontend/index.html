@@ -30,16 +30,16 @@
             </div>
 
             <!-- login form -->
-            <form action="#" class="login-form" autocomplete="off">
+            <form action="#" class="login-form" autocomplete="off" novalidate>
                 <div class = "input-box">
-                    <input type="text" class="input-field" id="log-email" required>
+                    <input type="text" class="input-field" id="log-email" placeholder=" " required>
                     <label for="log-email" class="label">Email</label>
                     <i class="bx bx-envelope icon"></i>
                 </div>
 
 
                 <div class = "input-box">
-                    <input type="password" class="input-field" id="log-pass" required>
+                    <input type="password" class="input-field" id="log-pass" placeholder=" " required>
                     <label for="log-pass" class="label">Password</label>
                     <button type="button" class="uncover" id="seePass" title="Show password"> 
                         <i class="bx bx-show"></i>
@@ -64,19 +64,21 @@
             </form>
 
             <!-- register form -->
-            <form action="#" class="register-form" autocomplete="off">
+            <form action="#" class="register-form" autocomplete="off" novalidate>
                 <div class = "input-box">
-                    <input type="text" class="input-field" id="reg-name" required>
+                    <input type="text" class="input-field" id="reg-name" placeholder=" " required>
                     <label for="reg-name" class="label">Username</label>
                     <i class="bx bx-user icon"></i>
                 </div>
                 <div class = "input-box">
-                    <input type="email" class="input-field" id="reg-email" required>
+
+                    <input type="email" class="input-field" id="reg-email" placeholder=" " required>
+
                     <label for="reg-email" class="label">Email</label>
                     <i class="bx bx-envelope icon"></i>
                 </div>
                 <div class="input-box">
-                    <input type="password" class="input-field" id="reg-pass" required>
+                    <input type="password" class="input-field" id="reg-pass" placeholder=" " required>
                     <label for="reg-pass" class="label">Password</label>
                     <button type="button" class="uncover" id="viewPass" title="Show password"> 
                         <i class="bx bx-show"></i>
@@ -137,8 +139,10 @@
                     <button id="closeAlert" class="alert-close">
                         <i class="bx bx-x"></i>
                     </button>
-                    <h2>Logging Failed</h2>
-                    <p>Email or password is invalid.</p>
+
+                    <h2 id="alertTitle">Logging Failed</h2>
+                    <p id="alertMessage">Email or password is invalid.</p>
+
                     <button id="confirmAlert">Ok</button>
                 </div>
             </div>
