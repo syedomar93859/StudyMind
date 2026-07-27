@@ -23,7 +23,7 @@ app.use(express.json());
 // Lets Express understand incoming JSON data
 
 app.use(session({
-    secret: 'your-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false } // set to true if using HTTPS
