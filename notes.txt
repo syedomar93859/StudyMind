@@ -1,29 +1,207 @@
-important commands:
-npm init -y
-npm install express(npm i express)
+StudyMind Notes
 
+Useful Commands
+
+Initialize the project
+npm init -y
+
+Install Express
+npm install express
+
+Run a JavaScript file
 node welcome.js
 
-use this command to find the PID or the 3000 server:
+Run the development server
+npm run dev
+
+Find the process using port 3000
 lsof -i :3000
 
-use this command to stop the server but replace 68191 with the PID:
+Kill the process (replace the PID)
 kill -9 68191
 
-command for gemini sdk:
+
+Installed Packages
+
+Express
+npm install express
+
+Gemini SDK
 npm install @google/genai
 
-handling API keys safely:
+Environment variables
 npm install dotenv
 
-you have to create an a gemini api key:
-https://ai.google.dev/gemini-api/docs/quickstart
-
-this is for converting from markdown to html:
+Convert Markdown to HTML
 npm install marked
 
-Implement these later:
-Add settings to log out
-add a way to view the full note
-maybe a color indicator to show that the password is strong or not(red means weak and green means strong)
+Authentication
+npm install express-session
+npm install bcryptjs
+
+
+Useful Links
+
+Gemini API Key
+https://ai.google.dev/gemini-api/docs/quickstart
+
+
+Backend Files
+
+AI-setup.js
+
+Creates the Gemini client using the API key from the .env file
+
+Responsibilities:
+- Creates the Gemini model
+- Loads previous chat history
+- Adds the user's newest question
+- Sends everything to Gemini
+- Returns the AI response
+- Handles API errors and converts them into user-friendly messages
+
+
+app.js
+
+Handles everything related to the database
+
+Responsibilities:
+- Opens the database connection
+- Creates tables from schema.sql
+- Inserts, updates, retrieves, and deletes information
+- Contains all database functions for accounts, notes, and AI history
+
+This file should never handle HTTP requests
+
+
+password.js
+
+Handles password security
+
+Responsibilities:
+- Hashes passwords with bcrypt
+- Verifies passwords during login
+- Hashes new passwords when changing them
+
+
+server.js
+
+Main backend server
+
+Responsibilities:
+- Starts Express
+- Serves frontend files
+- Defines every API endpoint
+- Handles login/logout
+- Handles authentication
+- Connects the frontend with the database
+- Connects the frontend with Gemini
+
+
+Frontend Files
+
+ask-ai.html
+
+Creates the layout for the AI chat page
+
+ai.js
+
+Handles the AI conversation
+
+Responsibilities:
+- Sends prompts to the backend
+- Displays AI responses
+- Loads previous conversation history
+
+
+home.html
+
+Creates the home page after logging in
+
+home.js
+
+Handles navigation around the website
+
+
+index.html
+
+Creates the login and registration page
+
+login.js
+
+Handles:
+- Logging in
+- Creating accounts
+- Registration validation
+- Starting a user session
+
+
+notes.html
+
+Creates the notes page
+
+notes.js
+
+Handles:
+- Creating notes
+- Editing notes
+- Deleting notes
+- Loading notes from the backend
+
+
+settings.html
+
+Creates the settings page
+
+settings.js
+
+Handles:
+- Username changes
+- Email changes
+- Password changes
+- Logging out
+- Deleting an account
+
+
+sessions.js
+
+Stores some user information in the browser after login
+
+Originally intended to reduce repeated requests to the backend
+Could probably be replaced with a better server-side session implementation
+
+
+CSS Files
+
+ai.css
+home.css
+login.css
+notes.css
+settings.css
+
+Each file styles its own page
+
+favicon.ico
+
+Stores the browser tab icon
+
+
+Current Issues
+
+Render
+
+- Render's free tier deletes the SQLite database whenever the service restarts
+- Accounts, notes, and AI history are not permanent on the live deployment
+
+Sessions
+
+- Authentication works, but the session implementation could be better
+- Some account information is still stored client-side in sessions.js instead of relying completely on express-session
+
+Security
+
+- Cookies are configured for local development
+- No CSRF protection
+- No rate limiting
+- Input validation could be improved
 
